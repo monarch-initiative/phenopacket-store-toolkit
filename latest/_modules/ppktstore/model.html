@@ -208,6 +208,11 @@
 <div class="viewcode-block" id="PhenopacketStore">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore">[docs]</a>
 <span class="k">class</span> <span class="nc">PhenopacketStore</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `PhenopacketStore` provides the data and metadata for Phenopacket Store cohorts.</span>
+
+<span class="sd">    Use :func:`from_release_zip` or :func:`from_notebook_dir` to open a store instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="PhenopacketStore.from_release_zip">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore.from_release_zip">[docs]</a>
@@ -223,7 +228,10 @@
 <span class="sd">        created by :class:`ppktstore.archive.PhenopacketStoreArchiver`.</span>
 <span class="sd">        Only JSON phenopacket format is supported at the moment.</span>
 
-<span class="sd">        The phenopackets can be loaded eagerly or in a lazy fashion.</span>
+<span class="sd">        Strategy</span>
+<span class="sd">        ^^^^^^^^</span>
+
+<span class="sd">        The phenopackets can be loaded in an *eager* or *lazy* fashion.</span>
 <span class="sd">        The `&#39;eager&#39;` strategy will load all phenopackets during the load</span>
 <span class="sd">        at the expense of the loading time and higher RAM usage.</span>
 <span class="sd">        The `&#39;lazy&#39;` strategy only scans the ZIP for phenopackets</span>
@@ -354,17 +362,27 @@
     <span class="nd">@property</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a `str` with the Phenopacket Store name. Most of the time,</span>
+<span class="sd">        the name corresponds to the release tag (e.g. `0.1.18`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get path to the phenopacket store resource.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="PhenopacketStore.cohorts">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore.cohorts">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">cohorts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">CohortInfo</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a collection of all Phenopacket Store cohorts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 
@@ -375,6 +393,12 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CohortInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a Phenopacket Store cohort by its name.</span>
+
+<span class="sd">        :param name: a `str` with the cohort name (e.g. ``SUOX``).</span>
+<span class="sd">        :raises KeyError: if no cohort with such name exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 
@@ -395,18 +419,27 @@
 <div class="viewcode-block" id="PhenopacketStore.cohort_names">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore.cohort_names">[docs]</a>
     <span class="k">def</span> <span class="nf">cohort_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an iterator with names of all Phenopacket Store cohorts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ci</span><span class="p">:</span> <span class="n">ci</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cohorts</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="PhenopacketStore.cohort_count">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore.cohort_count">[docs]</a>
     <span class="k">def</span> <span class="nf">cohort_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the count of Phenopacket Store cohorts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cohorts</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="PhenopacketStore.phenopacket_count">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore.phenopacket_count">[docs]</a>
     <span class="k">def</span> <span class="nf">phenopacket_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the total number of phenopackets available in Phenopacket Store.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cohort</span><span class="p">)</span> <span class="k">for</span> <span class="n">cohort</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cohorts</span><span class="p">())</span></div>
 </div>
 

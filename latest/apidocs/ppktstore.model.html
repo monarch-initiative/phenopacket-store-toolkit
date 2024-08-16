@@ -174,6 +174,8 @@
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ppktstore.model.</span></span><span class="sig-name descname"><span class="pre">PhenopacketStore</span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p><cite>PhenopacketStore</cite> provides the data and metadata for Phenopacket Store cohorts.</p>
+<p>Use <a class="reference internal" href="#ppktstore.model.PhenopacketStore.from_release_zip" title="ppktstore.model.PhenopacketStore.from_release_zip"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_release_zip()</span></code></a> or <a class="reference internal" href="#ppktstore.model.PhenopacketStore.from_notebook_dir" title="ppktstore.model.PhenopacketStore.from_notebook_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_notebook_dir()</span></code></a> to open a store instance.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.from_release_zip">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_release_zip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zip_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/zipfile.html#zipfile.ZipFile" title="(in Python v3.12)"><span class="pre">ZipFile</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'eager'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'lazy'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'eager'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.from_release_zip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.from_release_zip" title="Link to this definition"></a></dt>
@@ -181,7 +183,9 @@
 <p>The archive structure must match the structure of the ZIP archives
 created by <code class="xref py py-class docutils literal notranslate"><span class="pre">ppktstore.archive.PhenopacketStoreArchiver</span></code>.
 Only JSON phenopacket format is supported at the moment.</p>
-<p>The phenopackets can be loaded eagerly or in a lazy fashion.
+<section id="strategy">
+<h2>Strategy<a class="headerlink" href="#strategy" title="Link to this heading"></a></h2>
+<p>The phenopackets can be loaded in an <em>eager</em> or <em>lazy</em> fashion.
 The <cite>‘eager’</cite> strategy will load all phenopackets during the load
 at the expense of the loading time and higher RAM usage.
 The <cite>‘lazy’</cite> strategy only scans the ZIP for phenopackets
@@ -199,16 +203,17 @@ In result, the lazy loading will only succeed if the ZIP handle is opened.</p>
 </div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>zip_file</strong> – a ZIP archive handle.</p></li>
-<li><p><strong>strategy</strong> – a <cite>str</cite> with strategy for loading phenopackets, one of <cite>{‘eager’, ‘lazy’}</cite>.</p></li>
-</ul>
+<dt class="field-odd">param zip_file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a ZIP archive handle.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#ppktstore.model.PhenopacketStore" title="ppktstore.model.PhenopacketStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhenopacketStore</span></code></a> with data read from the archive.</p>
+<dt class="field-even">param strategy<span class="colon">:</span></dt>
+<dd class="field-even"><p>a <cite>str</cite> with strategy for loading phenopackets, one of <cite>{‘eager’, ‘lazy’}</cite>.</p>
+</dd>
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ppktstore.model.PhenopacketStore" title="ppktstore.model.PhenopacketStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhenopacketStore</span></code></a> with data read from the archive.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
@@ -223,22 +228,35 @@ and the phenopackets should be stored in <cite>nb_dir</cite> sub-folder (<code c
 <dl class="py property">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.name">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#ppktstore.model.PhenopacketStore.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get a <cite>str</cite> with the Phenopacket Store name. Most of the time,
+the name corresponds to the release tag (e.g. <cite>0.1.18</cite>).</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.path">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></em><a class="headerlink" href="#ppktstore.model.PhenopacketStore.path" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get path to the phenopacket store resource.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.cohorts">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cohorts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Collection" title="(in Python v3.12)"><span class="pre">Collection</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ppktstore.model.CohortInfo" title="ppktstore.model.CohortInfo"><span class="pre">CohortInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.cohorts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.cohorts" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get a collection of all Phenopacket Store cohorts.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.cohort_for_name">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cohort_for_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ppktstore.model.CohortInfo" title="ppktstore.model.CohortInfo"><span class="pre">CohortInfo</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.cohort_for_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.cohort_for_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve a Phenopacket Store cohort by its name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – a <cite>str</cite> with the cohort name (e.g. <code class="docutils literal notranslate"><span class="pre">SUOX</span></code>).</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.12)"><strong>KeyError</strong></a> – if no cohort with such name exists.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.iter_cohort_phenopackets">
@@ -254,17 +272,20 @@ and the phenopackets should be stored in <cite>nb_dir</cite> sub-folder (<code c
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.cohort_names">
 <span class="sig-name descname"><span class="pre">cohort_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.12)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.cohort_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.cohort_names" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get an iterator with names of all Phenopacket Store cohorts.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.cohort_count">
 <span class="sig-name descname"><span class="pre">cohort_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.cohort_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.cohort_count" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Compute the count of Phenopacket Store cohorts.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.PhenopacketStore.phenopacket_count">
 <span class="sig-name descname"><span class="pre">phenopacket_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.phenopacket_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.phenopacket_count" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Compute the total number of phenopackets available in Phenopacket Store.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -275,22 +296,35 @@ and the phenopackets should be stored in <cite>nb_dir</cite> sub-folder (<code c
 <dl class="py property">
 <dt class="sig sig-object py" id="ppktstore.model.DefaultPhenopacketStore.name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#ppktstore.model.DefaultPhenopacketStore.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get a <cite>str</cite> with the Phenopacket Store name. Most of the time,
+the name corresponds to the release tag (e.g. <cite>0.1.18</cite>).</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="ppktstore.model.DefaultPhenopacketStore.path">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></em><a class="headerlink" href="#ppktstore.model.DefaultPhenopacketStore.path" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get path to the phenopacket store resource.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.DefaultPhenopacketStore.cohorts">
 <span class="sig-name descname"><span class="pre">cohorts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Collection" title="(in Python v3.12)"><span class="pre">Collection</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ppktstore.model.CohortInfo" title="ppktstore.model.CohortInfo"><span class="pre">CohortInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#DefaultPhenopacketStore.cohorts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.DefaultPhenopacketStore.cohorts" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get a collection of all Phenopacket Store cohorts.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ppktstore.model.DefaultPhenopacketStore.cohort_for_name">
 <span class="sig-name descname"><span class="pre">cohort_for_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ppktstore.model.CohortInfo" title="ppktstore.model.CohortInfo"><span class="pre">CohortInfo</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#DefaultPhenopacketStore.cohort_for_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.DefaultPhenopacketStore.cohort_for_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve a Phenopacket Store cohort by its name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – a <cite>str</cite> with the cohort name (e.g. <code class="docutils literal notranslate"><span class="pre">SUOX</span></code>).</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.12)"><strong>KeyError</strong></a> – if no cohort with such name exists.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

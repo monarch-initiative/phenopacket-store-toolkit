@@ -105,6 +105,16 @@
     <span class="n">release_service</span><span class="p">:</span> <span class="n">PhenopacketStoreReleaseService</span> <span class="o">=</span> <span class="n">GitHubPhenopacketStoreReleaseService</span><span class="p">(),</span>
     <span class="n">remote_phenopacket_store_service</span><span class="p">:</span> <span class="n">RemotePhenopacketStoreService</span> <span class="o">=</span> <span class="n">GitHubRemotePhenopacketStoreService</span><span class="p">(),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhenopacketStoreRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function for getting default :class:`PhenopacketStoreRegistry`.</span>
+
+<span class="sd">    :param store_dir: path to the directory for storing the registry data</span>
+<span class="sd">      (``$HOME/.phenopacket-store`` if `None` is provided).</span>
+<span class="sd">    :param release_service: the service for getting release tags.</span>
+<span class="sd">      By default, the tags are fetched from GitHub REST API.</span>
+<span class="sd">    :param remote_phenopacket_store_service: a service for getting Phenopacket Store ZIP release data. </span>
+<span class="sd">      By default, the data is obtained from GitHub REST API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">store_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">store_dir</span> <span class="o">=</span> <span class="n">get_default_ontology_store_dir</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>

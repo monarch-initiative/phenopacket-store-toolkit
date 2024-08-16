@@ -149,7 +149,9 @@
 
 
 
-<span class="k">class</span> <span class="nc">ZipPhenopacketStoreAdaptor</span><span class="p">:</span>
+<div class="viewcode-block" id="PhenopacketStoreZipAdaptor">
+<a class="viewcode-back" href="../../../apidocs/ppktstore.registry.html#ppktstore.registry.PhenopacketStoreZipAdaptor">[docs]</a>
+<span class="k">class</span> <span class="nc">PhenopacketStoreZipAdaptor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A context manager for handling opening and closing of the Phenopacket Store release ZIP handle.</span>
 
@@ -176,7 +178,8 @@
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_zip_file</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_zip_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_zip_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_zip_file</span> <span class="o">=</span> <span class="kc">None</span></div>
+
 
 
 <div class="viewcode-block" id="PhenopacketStoreRegistry">
@@ -214,7 +217,7 @@
     <span class="k">def</span> <span class="nf">open_phenopacket_store</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">release</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZipPhenopacketStoreAdaptor</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhenopacketStoreZipAdaptor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open Phenopacket Store.</span>
 
@@ -252,7 +255,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Stored the ontology at </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fpath_ps_release_zip</span><span class="p">)</span>
 
         <span class="c1"># Provide PS adaptor</span>
-        <span class="k">return</span> <span class="n">ZipPhenopacketStoreAdaptor</span><span class="p">(</span><span class="n">fpath_ps_release_zip</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">PhenopacketStoreZipAdaptor</span><span class="p">(</span><span class="n">fpath_ps_release_zip</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PhenopacketStoreRegistry.clear">
