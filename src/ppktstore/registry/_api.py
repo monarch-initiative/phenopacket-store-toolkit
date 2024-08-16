@@ -55,7 +55,7 @@ class RemotePhenopacketStoreService(metaclass=abc.ABCMeta):
         pass
 
 
-class ZipPhenopacketStoreAdaptor:
+class PhenopacketStoreZipAdaptor:
     """
     A context manager for handling opening and closing of the Phenopacket Store release ZIP handle.
 
@@ -116,7 +116,7 @@ class PhenopacketStoreRegistry:
     def open_phenopacket_store(
         self,
         release: typing.Optional[str] = None,
-    ) -> ZipPhenopacketStoreAdaptor:
+    ) -> PhenopacketStoreZipAdaptor:
         """
         Open Phenopacket Store.
 
@@ -154,7 +154,7 @@ class PhenopacketStoreRegistry:
             self._logger.debug("Stored the ontology at %s", fpath_ps_release_zip)
 
         # Provide PS adaptor
-        return ZipPhenopacketStoreAdaptor(fpath_ps_release_zip)
+        return PhenopacketStoreZipAdaptor(fpath_ps_release_zip)
 
     def clear(
         self,
