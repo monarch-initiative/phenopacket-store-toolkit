@@ -21,6 +21,16 @@ def configure_phenopacket_registry(
     release_service: PhenopacketStoreReleaseService = GitHubPhenopacketStoreReleaseService(),
     remote_phenopacket_store_service: RemotePhenopacketStoreService = GitHubRemotePhenopacketStoreService(),
 ) -> PhenopacketStoreRegistry:
+    """
+    A function for getting default :class:`PhenopacketStoreRegistry`.
+
+    :param store_dir: path to the directory for storing the registry data
+      (``$HOME/.phenopacket-store`` if `None` is provided).
+    :param release_service: the service for getting release tags.
+      By default, the tags are fetched from GitHub REST API.
+    :param remote_phenopacket_store_service: a service for getting Phenopacket Store ZIP release data. 
+      By default, the data is obtained from GitHub REST API.
+    """
     if store_dir is None:
         store_dir = get_default_ontology_store_dir()
     else:

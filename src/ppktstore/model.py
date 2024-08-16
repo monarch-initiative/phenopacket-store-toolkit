@@ -109,6 +109,11 @@ class CohortInfo:
 
 
 class PhenopacketStore(metaclass=abc.ABCMeta):
+    """
+    `PhenopacketStore` provides the data and metadata for Phenopacket Store cohorts.
+
+    Use :func:`from_release_zip` or :func:`from_notebook_dir` to open a store instance.
+    """
 
     @staticmethod
     def from_release_zip(
@@ -122,7 +127,10 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         created by :class:`ppktstore.archive.PhenopacketStoreArchiver`.
         Only JSON phenopacket format is supported at the moment.
 
-        The phenopackets can be loaded eagerly or in a lazy fashion.
+        Strategy
+        ^^^^^^^^
+
+        The phenopackets can be loaded in an *eager* or *lazy* fashion.
         The `'eager'` strategy will load all phenopackets during the load
         at the expense of the loading time and higher RAM usage.
         The `'lazy'` strategy only scans the ZIP for phenopackets
@@ -249,15 +257,25 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
     @property
     @abc.abstractmethod
     def name(self) -> str:
+        """
+        Get a `str` with the Phenopacket Store name. Most of the time,
+        the name corresponds to the release tag (e.g. `0.1.18`).
+        """
         pass
 
     @property
     @abc.abstractmethod
     def path(self) -> pathlib.Path:
+        """
+        Get path to the phenopacket store resource.
+        """
         pass
 
     @abc.abstractmethod
     def cohorts(self) -> typing.Collection[CohortInfo]:
+        """
+        Get a collection of all Phenopacket Store cohorts.
+        """
         pass
 
     @abc.abstractmethod
@@ -265,6 +283,12 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         self,
         name: str,
     ) -> CohortInfo:
+        """
+        Retrieve a Phenopacket Store cohort by its name.
+
+        :param name: a `str` with the cohort name (e.g. ``SUOX``).
+        :raises KeyError: if no cohort with such name exists.
+        """
         pass
 
     def iter_cohort_phenopackets(
@@ -279,12 +303,21 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         return self.cohort_for_name(name).iter_phenopackets()
 
     def cohort_names(self) -> typing.Iterator[str]:
+        """
+        Get an iterator with names of all Phenopacket Store cohorts.
+        """
         return map(lambda ci: ci.name, self.cohorts())
 
     def cohort_count(self) -> int:
+        """
+        Compute the count of Phenopacket Store cohorts.
+        """
         return len(self.cohorts())
 
     def phenopacket_count(self) -> int:
+        """
+        Compute the total number of phenopackets available in Phenopacket Store.
+        """
         return sum(len(cohort) for cohort in self.cohorts())
 
 
