@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Load Phenopacket Store &mdash; phenopacket-store-toolkit 0.1.1dev documentation</title>
+  <title>Load Phenopacket Store &mdash; phenopacket-store-toolkit 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -17,7 +17,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=8427294d"></script>
+        <script src="../_static/documentation_options.js?v=a58bc63e"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">User guide</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Load Phenopacket Store</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Load Phenopacket Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load-a-single-phenopacket-cohort">Load a single phenopacket cohort</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../apidocs/modules.html">API reference</a></li>
@@ -88,7 +91,34 @@
              
   <section id="load-phenopacket-store">
 <span id="id1"></span><h1>Load Phenopacket Store<a class="headerlink" href="#load-phenopacket-store" title="Link to this heading"></a></h1>
-<p>TODO - write.</p>
+<p>Phenopacket Store Toolkit simplifies loading the Phenopacket Store cohorts.
+The toolkit removes the boilerplate required for downloading and keeping track of the release files,
+and for phenopacket I/O.</p>
+<section id="load-a-single-phenopacket-cohort">
+<h2>Load a single phenopacket cohort<a class="headerlink" href="#load-a-single-phenopacket-cohort" title="Link to this heading"></a></h2>
+<p>Here we show how to load phenopackets of a <em>SUOX</em> cohort from Phenopacket Store release <cite>0.1.18</cite>.</p>
+<p>We start with the imports:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ppktstore.registry</span> <span class="kn">import</span> <span class="n">configure_phenopacket_registry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span> <span class="o">=</span> <span class="n">configure_phenopacket_registry</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We created a <a class="reference internal" href="../apidocs/ppktstore.registry.html#ppktstore.registry.PhenopacketStoreRegistry" title="ppktstore.registry.PhenopacketStoreRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">ppktstore.registry.PhenopacketStoreRegistry</span></code></a> to manage the release files.
+By default, the registry stores the release ZIP files at <code class="docutils literal notranslate"><span class="pre">$HOME/.phenopacket-store</span></code> for Unix,
+or <code class="docutils literal notranslate"><span class="pre">$HOME/phenopacket-store</span></code> for Windows.</p>
+<p>Now let’s load the phenopackets.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">registry</span><span class="o">.</span><span class="n">open_phenopacket_store</span><span class="p">(</span><span class="n">release</span><span class="o">=</span><span class="s2">&quot;0.1.18&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ps</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">phenopackets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">iter_cohort_phenopackets</span><span class="p">(</span><span class="s2">&quot;SUOX&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">phenopackets</span><span class="p">)</span>
+<span class="go">35</span>
+</pre></div>
+</div>
+<p>We open Phenopacket Store with release <cite>0.1.18</cite>. Behind the scenes, the registry checks if the ZIP file
+has been previously downloaded. If absent, the ZIP file is fetched from GitHub.
+This is followed by opening the ZIP file and creating <a class="reference internal" href="../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore" title="ppktstore.model.PhenopacketStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">ppktstore.model.PhenopacketStore</span></code></a> (<code class="docutils literal notranslate"><span class="pre">ps</span></code>).
+We can load phenopackets for a cohort name (e.g. <em>SUOX</em>). The phenopackets are loaded lazily,
+and we collect them into a list.</p>
+<p>We loaded 35 phenopackets!</p>
+</section>
 </section>
 
 
