@@ -2,9 +2,9 @@ name: Phenopacket Store Toolkit CI
 
 on:
     push:
-      branches: [ master ]
+      branches: [ main ]
     pull_request:
-      branches: [ master, develop ]
+      branches: [ main, develop ]
 
 jobs:
     run-ci:

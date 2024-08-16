@@ -79,5 +79,5 @@ and ZIP the directory into `all_phenopackets.zip`.
 
 Find more info in our detailed documentation:
 
-- [Stable documentation](https://monarch-initiative.github.io/phenopacket-store-toolkit/stable) (last release on `master` branch)
-- [Latest documentation](https://monarch-initiative.github.io/phenopacket-store-toolkit/latest) (bleeding edge, latest commit on `development` branch)
+- [Stable documentation](https://monarch-initiative.github.io/phenopacket-store-toolkit/stable) (last release on `main` branch)
+- [Latest documentation](https://monarch-initiative.github.io/phenopacket-store-toolkit/latest) (bleeding edge, latest commit on `develop` branch)
