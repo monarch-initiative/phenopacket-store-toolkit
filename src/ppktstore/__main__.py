@@ -91,7 +91,7 @@ def main(argv) -> int:
             store=store,
             formats=args.format,
             filename=args.output,
-            top_level_folder=args.top_level_dir,
+            release_tag=args.release_tag,
             logger=logger,
         )
     elif args.command == "qc":
