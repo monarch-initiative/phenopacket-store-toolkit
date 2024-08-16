@@ -1,0 +1,18 @@
+ppktstore.release package
+=========================
+
+.. automodule:: ppktstore.release
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   ppktstore.release.archive
+   ppktstore.release.qc
+   ppktstore.release.report
+   ppktstore.release.stats

@@ -1,0 +1,7 @@
+ppktstore.release.qc package
+============================
+
+.. automodule:: ppktstore.release.qc
+   :members:
+   :undoc-members:
+   :show-inheritance:

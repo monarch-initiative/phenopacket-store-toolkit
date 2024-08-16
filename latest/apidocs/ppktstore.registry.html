@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ppktstore.registry package &mdash; phenopacket-store-toolkit 0.1.1dev documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/phenopacket-store-toolkit.css?v=a9fa5eb9" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8427294d"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ppktstore.release package" href="ppktstore.release.html" />
+    <link rel="prev" title="ppktstore package" href="ppktstore.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            phenopacket-store-toolkit
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Setup &amp; User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/index.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ppktstore.html">ppktstore package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="ppktstore.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ppktstore.registry package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ppktstore.release.html">ppktstore.release package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ppktstore.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">phenopacket-store-toolkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ppktstore.html">ppktstore package</a></li>
+      <li class="breadcrumb-item active">ppktstore.registry package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidocs/ppktstore.registry.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ppktstore.registry">
+<span id="ppktstore-registry-package"></span><h1>ppktstore.registry package<a class="headerlink" href="#module-ppktstore.registry" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="ppktstore.registry.configure_phenopacket_registry">
+<span class="sig-prename descclassname"><span class="pre">ppktstore.registry.</span></span><span class="sig-name descname"><span class="pre">configure_phenopacket_registry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store_dir:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">~pathlib.Path</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_service:</span> <span class="pre">~ppktstore.registry._api.PhenopacketStoreReleaseService</span> <span class="pre">=</span> <span class="pre">&lt;ppktstore.registry._github.GitHubPhenopacketStoreReleaseService</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_phenopacket_store_service:</span> <span class="pre">~ppktstore.registry._api.RemotePhenopacketStoreService</span> <span class="pre">=</span> <span class="pre">&lt;ppktstore.registry._github.GitHubRemotePhenopacketStoreService</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ppktstore.registry.PhenopacketStoreRegistry" title="ppktstore.registry._api.PhenopacketStoreRegistry"><span class="pre">PhenopacketStoreRegistry</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/registry/_config.html#configure_phenopacket_registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.configure_phenopacket_registry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ppktstore.registry.PhenopacketStoreRegistry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ppktstore.registry.</span></span><span class="sig-name descname"><span class="pre">PhenopacketStoreRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ppktstore.registry.PhenopacketStoreReleaseService" title="ppktstore.registry._api.PhenopacketStoreReleaseService"><span class="pre">PhenopacketStoreReleaseService</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_phenopacket_store_service</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ppktstore.registry.RemotePhenopacketStoreService" title="ppktstore.registry._api.RemotePhenopacketStoreService"><span class="pre">RemotePhenopacketStoreService</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#PhenopacketStoreRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.PhenopacketStoreRegistry" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p><cite>PhenopacketStoreRegistry</cite> manages Phenopacket Store releases on a local system.</p>
+<p>The registry fetches a ZIP archive with a specific version of Phenopacket Store
+(or the <em>latest</em> version) from GitHub and stores it in a data directory.
+Any subsequent openings of Phenopacket Store will use the local ZIP file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ppktstore.registry.PhenopacketStoreRegistry.open_phenopacket_store">
+<span class="sig-name descname"><span class="pre">open_phenopacket_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ZipPhenopacketStoreAdaptor</span></span></span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#PhenopacketStoreRegistry.open_phenopacket_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.PhenopacketStoreRegistry.open_phenopacket_store" title="Link to this definition"></a></dt>
+<dd><p>Open Phenopacket Store.</p>
+<p>Provides an adaptor object that should be used as a context manager to ensure proper resource cleanup.</p>
+<p><strong>Example</strong></p>
+<p>Let’s load all phenopackets of the <em>SUOX</em> cohort from the <cite>0.1.18</cite> release of Phenopacket Store:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ppktstore.registry</span> <span class="kn">import</span> <span class="n">configure_phenopacket_registry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span> <span class="o">=</span> <span class="n">configure_phenopacket_registry</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">registry</span><span class="o">.</span><span class="n">open_phenopacket_store</span><span class="p">(</span><span class="n">release</span><span class="o">=</span><span class="s2">&quot;0.1.18&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ps</span><span class="p">:</span>  
+<span class="gp">... </span>  <span class="n">phenopackets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">iter_cohort_phenopackets</span><span class="p">(</span><span class="s2">&quot;SUOX&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">phenopackets</span><span class="p">)</span>  
+<span class="go">35</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>release</strong> – a <cite>str</cite> with Phenopacket Store release tag (e.g. <cite>0.1.18</cite>) or <cite>None</cite>
+if the <em>latest</em> release should be loaded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ppktstore.registry.PhenopacketStoreRegistry.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#PhenopacketStoreRegistry.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.PhenopacketStoreRegistry.clear" title="Link to this definition"></a></dt>
+<dd><p>Clear all Phenopacket Store releases.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ppktstore.registry.PhenopacketStoreRegistry.resolve_registry_path">
+<span class="sig-name descname"><span class="pre">resolve_registry_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#PhenopacketStoreRegistry.resolve_registry_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.PhenopacketStoreRegistry.resolve_registry_path" title="Link to this definition"></a></dt>
+<dd><p>Resolve the path of a specific Phenopacket Store release within the registry.</p>
+<p>Note, the path points to the location of the release ZIP in the local filesystem.
+The path may point to a non-existing file, if the load function has not been run yet.</p>
+<p><strong>Example</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ppktstore.registry</span> <span class="kn">import</span> <span class="n">configure_phenopacket_registry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span> <span class="o">=</span> <span class="n">configure_phenopacket_registry</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span><span class="o">.</span><span class="n">resolve_registry_path</span><span class="p">(</span><span class="n">release</span><span class="o">=</span><span class="s1">&#39;0.1.18&#39;</span><span class="p">)</span>  
+<span class="go">pathlib.Path(&#39;/home/user/.phenopacket-store/0.1.18.zip&#39;)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>release</strong> – an optional <cite>str</cite> with the desired PS release (if <cite>None</cite>, the latest release will be provided).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a path to the PS release file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ppktstore.registry.PhenopacketStoreReleaseService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ppktstore.registry.</span></span><span class="sig-name descname"><span class="pre">PhenopacketStoreReleaseService</span></span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#PhenopacketStoreReleaseService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.PhenopacketStoreReleaseService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p><cite>PhenopacketStoreReleaseService</cite> knows how to fetch
+the Phenopacket Store release tags (e.g. <cite>0.1.18</cite>).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ppktstore.registry.PhenopacketStoreReleaseService.fetch_tags">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_tags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.12)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#PhenopacketStoreReleaseService.fetch_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.PhenopacketStoreReleaseService.fetch_tags" title="Link to this definition"></a></dt>
+<dd><p>Fetch sequence of Phenopacket Store release tags.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ppktstore.registry.RemotePhenopacketStoreService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ppktstore.registry.</span></span><span class="sig-name descname"><span class="pre">RemotePhenopacketStoreService</span></span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#RemotePhenopacketStoreService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.RemotePhenopacketStoreService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p><cite>RemotePhenopacketStoreService</cite> knows how to open a <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">typing.BinaryIO</span></code></a>
+for reading content of a particular Phenopacket Store <cite>release</cite>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ppktstore.registry.RemotePhenopacketStoreService.fetch_resource">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/io.html#io.BufferedIOBase" title="(in Python v3.12)"><span class="pre">BufferedIOBase</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/registry/_api.html#RemotePhenopacketStoreService.fetch_resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.registry.RemotePhenopacketStoreService.fetch_resource" title="Link to this definition"></a></dt>
+<dd><p>Open a connection for reading bytes of the remote resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>release</strong> – a <cite>str</cite> with the desired Phenopacket Store release.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a binary IO for reading the Phenopacket Store data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ppktstore.html" class="btn btn-neutral float-left" title="ppktstore package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ppktstore.release.html" class="btn btn-neutral float-right" title="ppktstore.release package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

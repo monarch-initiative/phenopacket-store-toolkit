@@ -1,0 +1,7 @@
+ppktstore.registry package
+==========================
+
+.. automodule:: ppktstore.registry
+   :members:
+   :undoc-members:
+   :show-inheritance:

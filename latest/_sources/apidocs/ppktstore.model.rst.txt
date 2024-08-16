@@ -1,0 +1,7 @@
+ppktstore.model module
+======================
+
+.. automodule:: ppktstore.model
+   :members:
+   :undoc-members:
+   :show-inheritance:

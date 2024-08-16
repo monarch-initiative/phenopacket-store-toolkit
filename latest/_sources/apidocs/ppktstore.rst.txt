@@ -1,0 +1,24 @@
+ppktstore package
+=================
+
+.. automodule:: ppktstore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   ppktstore.registry
+   ppktstore.release
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 2
+
+   ppktstore.model

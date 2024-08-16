@@ -1,0 +1,7 @@
+ppktstore.release.stats package
+===============================
+
+.. automodule:: ppktstore.release.stats
+   :members:
+   :undoc-members:
+   :show-inheritance:
