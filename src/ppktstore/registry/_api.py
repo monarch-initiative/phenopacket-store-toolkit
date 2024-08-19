@@ -145,10 +145,7 @@ class PhenopacketStoreRegistry:
         if not os.path.isfile(fpath_ps_release_zip):
             fdir_ps = os.path.dirname(fpath_ps_release_zip)
             os.makedirs(fdir_ps, exist_ok=True)
-            with (
-                self._remote_ps_service.fetch_resource(release) as response,
-                open(fpath_ps_release_zip, "wb") as fh_ps,
-            ):
+            with self._remote_ps_service.fetch_resource(release) as response, open(fpath_ps_release_zip, "wb") as fh_ps:
                 fh_ps.write(response.read())
 
             self._logger.debug("Stored the ontology at %s", fpath_ps_release_zip)
