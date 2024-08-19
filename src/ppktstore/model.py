@@ -168,7 +168,7 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
             entry_path = zipfile.Path(zip_file, at=entry.filename)
             if entry_path.is_dir():
                 entry_parent = relative_to(root, entry_path.parent)
-                print('#### entry_parent #### ' + entry_parent)
+                print('#### entry_parent #### `' + entry_parent + '`')
                 if entry_parent in ('', '.'):
                     name = entry_path.name
                 else:
