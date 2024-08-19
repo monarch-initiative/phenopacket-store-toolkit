@@ -169,7 +169,7 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
             if entry_path.is_dir():
                 entry_parent = relative_to(root, entry_path.parent)
                 print('#### entry_parent #### ' + entry_parent)
-                if entry_parent == '.':
+                if entry_parent in ('', '.'):
                     name = entry_path.name
                 else:
                     cohort_name = entry_path.name
