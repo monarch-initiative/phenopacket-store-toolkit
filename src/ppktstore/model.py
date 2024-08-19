@@ -10,6 +10,8 @@ from collections import defaultdict
 from google.protobuf.json_format import Parse
 from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
 
+from ._zip_util import relative_to
+
 
 class PhenopacketInfo(metaclass=abc.ABCMeta):
     """
@@ -165,12 +167,13 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         for entry in zip_file.infolist():
             entry_path = zipfile.Path(zip_file, at=entry.filename)
             if entry_path.is_dir():
-                if entry_path.parent == root:
+                entry_parent = relative_to(root, entry_path.parent)
+                if entry_parent in ('', '.'):
                     name = entry_path.name
                 else:
                     cohort_name = entry_path.name
                     cohort2path[cohort_name] = entry_path
-            elif entry_path.is_file() and entry_path.suffix == ".json":
+            elif entry_path.is_file() and entry_path.name.endswith('.json'):
                 # This SHOULD be a phenopacket!
                 cohort = entry_path.parent.name  # type: ignore
                 cohort2pp_paths[cohort].append(entry_path)
@@ -179,12 +182,18 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         cohorts = []
         for cohort, cohort_path in cohort2path.items():
             if cohort in cohort2pp_paths:
+                # cohort_path.relative_to(root)
+                at = relative_to(root, cohort_path)
                 rel_cohort_path = zipfile.Path(
-                    zip_file, at=cohort_path.relative_to(root)
+                    zip_file, at=at,
                 )
                 pp_infos = []
                 for pp_path in cohort2pp_paths[cohort]:
-                    path = pp_path.relative_to(cohort_path)
+                    # cohort_path_str = str(cohort_path)
+                    # pp_path_str = str(pp_path)
+                    # path = pp_path_str.replace(cohort_path_str, '')
+                    path = relative_to(cohort_path, pp_path)
+                    # path = pp_path.relative_to(cohort_path)
                     if strategy == "eager":
                         pi = EagerPhenopacketInfo.from_path(path, pp_path)
                     elif strategy == "lazy":

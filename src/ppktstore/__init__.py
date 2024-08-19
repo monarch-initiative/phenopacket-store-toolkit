@@ -6,9 +6,9 @@ and simplifies access to the store data for the downstream applications.
 from . import model
 from . import registry
 
-# We do not import `release` package since it requires extra dependencies.
+# We do not import `.release` package since it requires extra dependencies.
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 __all__ = [
     "model",
