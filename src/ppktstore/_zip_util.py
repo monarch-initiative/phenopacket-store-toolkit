@@ -1,14 +1,13 @@
 import sys
-import zipfile
 
 
 def relative_to(
-    a: zipfile.Path,
-    b: zipfile.Path,
+    a,
+    b,
 ) -> str:
     if sys.version_info >= (3, 12):
         # The functionality seems to have been introduced in 3.12.
-        return a.relative_to(b)
+        return str(a.relative_to(b))
     else:
         a_str = str(a)
         b_str = str(b)

@@ -167,7 +167,8 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         for entry in zip_file.infolist():
             entry_path = zipfile.Path(zip_file, at=entry.filename)
             if entry_path.is_dir():
-                if entry_path.parent == root:
+                entry_parent = relative_to(root, entry_path.parent)
+                if entry_parent == '.':
                     name = entry_path.name
                 else:
                     cohort_name = entry_path.name
