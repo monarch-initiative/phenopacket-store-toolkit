@@ -184,7 +184,10 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
                 )
                 pp_infos = []
                 for pp_path in cohort2pp_paths[cohort]:
-                    path = pp_path.relative_to(cohort_path)
+                    pp_path_str = str(pp_path)
+                    cohort_path_str = str(cohort_path)
+                    path = pp_path_str.replace(cohort_path_str, '')
+                    # path = pp_path.relative_to(cohort_path)
                     if strategy == "eager":
                         pi = EagerPhenopacketInfo.from_path(path, pp_path)
                     elif strategy == "lazy":
