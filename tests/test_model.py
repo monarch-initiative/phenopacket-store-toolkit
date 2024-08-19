@@ -22,7 +22,7 @@ class TestPhenopacketStore:
             ps = PhenopacketStore.from_release_zip(zf)
             assert ps.name == "test_get_store_zip0"
 
-            check_ps_specs(ps)
+        check_ps_specs(ps)
 
 
 def check_ps_specs(
