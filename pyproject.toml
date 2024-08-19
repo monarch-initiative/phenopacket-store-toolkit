@@ -18,6 +18,8 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
 keywords = [
@@ -25,7 +27,8 @@ keywords = [
     "GA4GH Phenopacket Schema",
     "Human Phenotype Ontology",
     "GA4GH",
-    "HPO"]
+    "HPO",
+]
 dependencies = [
     "phenopackets>=2.0.2.post4",
     "certifi", # The latest version is the best.
