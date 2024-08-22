@@ -1,3 +1,4 @@
+import io
 import logging
 
 from ._config import configure_qc_checker
@@ -10,16 +11,18 @@ def qc_phenopackets(
     logger: logging.Logger,
 ) -> int:
     logger.info('Checking phenopackets')
-    checker = configure_qc_checker()
-    results = checker.check(phenopacket_store=store)
-    if results.is_ok():
-        logger.info('No Q/C issues were found')
-        return 0
-    else:
-        logger.info('Phenopacket store Q/C failed')
-        
-        for checker_name, issues in results.iter_results():
-            logger.info('\'%s\' found %d error(s):', checker_name, len(issues))
-            for error in issues:
-                logger.info(' - %s', error)
+    auditor = configure_qc_checker()
+    notepad = auditor.prepare_notepad(store.name)
+    auditor.audit(
+        item=store,
+        notepad=notepad,
+    )
+
+    buf = io.StringIO()
+    notepad.summarize(file=buf)
+    if notepad.has_errors_or_warnings(include_subsections=True):
+        logger.error(buf.getvalue())
         return 1
+    else:
+        logger.info(buf.getvalue())
+        return 0

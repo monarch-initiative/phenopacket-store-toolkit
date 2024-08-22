@@ -197,6 +197,7 @@ doctest_default_flags = (doctest.REPORT_ONLY_FIRST_FAILURE
 # -- Intersphinx setup --------------------------------------------------------
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
+    "stairval": ("https://ielis.github.io/stairval/stable", None),
     "matplotlib": ("https://matplotlib.org/stable", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/version/2.0.0/", None),
