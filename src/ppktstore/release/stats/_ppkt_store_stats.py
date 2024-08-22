@@ -30,9 +30,10 @@ class PPKtStoreStats:
     def get_summary_df(self) -> pd.DataFrame:
         return self._df
 
-    def get_descriptive_stats(self) -> typing.Mapping[str, typing.Any]:
-        from ppktstore import __version__
-
+    def get_descriptive_stats(
+        self,
+        version: str,
+    ) -> typing.Mapping[str, typing.Any]:
         df = self._df
         genes_to_ppkt_d = defaultdict(int)
         diseases_to_ppkt_id = defaultdict(int)
@@ -50,7 +51,7 @@ class PPKtStoreStats:
             if allele_2 is not None and allele_2.startswith("NM_"):
                 unique_alleles.add(allele_2)
         stats_d = dict()
-        stats_d["version"] = __version__
+        stats_d["version"] = version
         stats_d["phenopackets"] = len(df)
         stats_d["diseases"] = len(df["disease_id"].unique())
         stats_d["genes"] = len(df["gene"].unique())
