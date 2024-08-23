@@ -2,7 +2,7 @@ import typing
 
 from collections import Counter, defaultdict
 
-from stairval import Notepad
+from stairval.notepad import Notepad
 
 from ppktstore.model import PhenopacketStore
 
@@ -44,8 +44,9 @@ class NoUnwantedCharactersCheck(PhenopacketStoreAuditor):
     """
 
     @staticmethod
-    def no_whitespace() -> "NoUnwantedCharactersCheck":
-        whitespaces = ("\t", "\n", "\r\n")
+    def no_whitespace(
+        whitespaces: typing.Iterable['str'] = ("\t", "\n", "\r\n"),
+    ) -> "NoUnwantedCharactersCheck":
         return NoUnwantedCharactersCheck(whitespaces)
 
     def __init__(
@@ -68,34 +69,28 @@ class NoUnwantedCharactersCheck(PhenopacketStoreAuditor):
                 pp_pad = cohort_pad.add_subsection(pp_info.path)
                 pp = pp_info.phenopacket
                 self._check_unwanted_characters(pp.id, pp_pad.add_subsection("id"))
-                subject_pad = pp_pad.add_subsection("subject")
-                subject_id_pad = subject_pad.add_subsection("id")
+                _, subject_id_pad = pp_pad.add_subsections("subject", "id")
                 self._check_unwanted_characters(pp.subject.id, subject_id_pad)
 
                 # Disease name in diseases and variant interpretations
                 disease_pad = pp_pad.add_subsection("disease")
                 for i, disease in enumerate(pp.diseases):
-                    dpad = disease_pad.add_subsection(f"#{i}")
-                    term_pad = dpad.add_subsection("term")
-                    label_pad = term_pad.add_subsection("label")
+                    _, _, label_pad = disease_pad.add_subsections(f"#{i}", "term", "label")
                     self._check_unwanted_characters(disease.term.label, label_pad)
 
                 interpretation_pad = pp_pad.add_subsection("interpretations")
                 for i, interpretation in enumerate(pp.interpretations):
                     id_pad = interpretation_pad.add_subsection("id")
                     self._check_unwanted_characters(interpretation.id, id_pad)
-                    diagnosis_pad = interpretation_pad.add_subsection("diagnosis")
-                    disease_pad = diagnosis_pad.add_subsection("disease")
-                    label_pad = diagnosis_pad.add_subsection("label")
+                    _, _, label_pad = interpretation_pad.add_subsections("diagnosis", "disease", "label")
                     self._check_unwanted_characters(
                         interpretation.diagnosis.disease.label, label_pad
                     )
 
                 # PubMed title
-                meta_pad = pp_pad.add_subsection("meta_data")
-                ers_pad = meta_pad.add_subsection("external_references")
+                _, ers_pad = pp_pad.add_subsections("meta_data", "external_references")
                 for i, er in enumerate(pp.meta_data.external_references):
-                    er_pad = ers_pad.add_subsection(f"#{i}")
+                    _, er_pad = ers_pad.add_subsections(f"#{i}", "description")
                     self._check_unwanted_characters(er.description, er_pad)
 
     def _check_unwanted_characters(
@@ -115,6 +110,7 @@ class DefaultPhenopacketStoreAuditor(PhenopacketStoreAuditor):
         checks: typing.Iterable[PhenopacketStoreAuditor],
     ):
         self._checks = tuple(checks)
+        self._id = '[' + ', '.join(check.make_id() for check in self._checks) + ']'
 
     def audit(
         self,
@@ -123,4 +119,10 @@ class DefaultPhenopacketStoreAuditor(PhenopacketStoreAuditor):
     ):
         for check in self._checks:
             sub_notepad = notepad.add_subsection(check.make_id())
-            check.audit(phenopacket_store=item, notepad=sub_notepad)
+            check.audit(
+                item=item,
+                notepad=sub_notepad,
+            )
+
+    def make_id(self) -> str:
+        return self._id
