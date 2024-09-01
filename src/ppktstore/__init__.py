@@ -8,7 +8,7 @@ from . import registry
 
 # We do not import `.release` package since it requires extra dependencies.
 
-__version__ = "0.1.4.dev0"
+__version__ = "0.1.5.dev0"
 
 __all__ = [
     "model",
