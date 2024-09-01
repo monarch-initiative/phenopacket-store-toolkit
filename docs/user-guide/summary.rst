@@ -27,4 +27,36 @@ table with all cohorts sorted according to size. ::
     df.head()
     # ...
 
+Note that some of the cohorts (which are usually gene-based) contain multiple disease entities. 
+To get the total counts per cohort, the following code can be used. ::
+
+    df_grouped = df.groupby('cohort')['count'].sum().reset_index()
+    df_sorted = df_grouped.sort_values(by='count', ascending=False)
+    df_sorted = df_sorted[["cohort", "count"]]
+    df_sorted.reset_index(drop=True, inplace=True)
+
+This will produce a table something like the following.
+
++-----------+-------+
+| cohort    | count |
++===========+=======+
+| STXBP1    | 463   |
++-----------+-------+
+| SCN2A     | 393   |
++-----------+-------+
+| ANKRD11   | 337   |
++-----------+-------+
+| RPGRIP1   | 229   |
++-----------+-------+
+|   SATB2   | 158   |
++-----------+-------+
+|   TBX5    | 156   |
++-----------+-------+
+|   ...     | ...   |
++-----------+-------+
+|   MAF     |   1   |
++-----------+-------+
+|  OCA2     |   1   |
++-----------+-------+
+
 

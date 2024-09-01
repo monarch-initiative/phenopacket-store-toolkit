@@ -147,14 +147,15 @@ class PPKtStoreStats:
                     raise ValueError("Empty disease list")
                 if len(ppkt.diseases) != 1:
                     print("Warning, number of diseases ", len(ppkt.diseases))
-                disease_term = (ppkt.diseases[0].term.id, ppkt.diseases[0].term.label)
+                disease_term = (ppkt.diseases[0].term.id, ppkt.diseases[0].term.label, cohort_info.name)
                 disease_to_count_d[disease_term] += 1
         items = list()
         for k, v in disease_to_count_d.items():
-            items.append({"disease": k[1], "id": k[0], "count": v})
+            items.append({"disease": k[1], "id": k[0], "cohort":k[2], "count": v})
         df = pd.DataFrame(items, index=None)
         df_sorted = df.sort_values(by='count', ascending=False)
-        return df
+        df_sorted.reset_index(drop=True, inplace=True)
+        return df_sorted
 
 
     @staticmethod
