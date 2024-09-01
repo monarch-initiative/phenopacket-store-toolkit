@@ -19,13 +19,13 @@ class UniqueIdsCheck(PhenopacketStoreAuditor):
 
     def audit(
         self,
-        phenopacket_store: PhenopacketStore,
+        item: PhenopacketStore,
         notepad: Notepad,
     ):
         id_counter = Counter()
         pp_id2cohort = defaultdict(set)
 
-        for cohort in phenopacket_store.cohorts():
+        for cohort in item.cohorts():
             for pp_info in cohort.phenopackets:
                 pp_id = pp_info.phenopacket.id
                 pp_id2cohort[pp_id].add(cohort.name)
@@ -60,10 +60,10 @@ class NoUnwantedCharactersCheck(PhenopacketStoreAuditor):
 
     def audit(
         self,
-        phenopacket_store: PhenopacketStore,
+        item: PhenopacketStore,
         notepad: Notepad,
     ):
-        for cohort in phenopacket_store.cohorts():
+        for cohort in item.cohorts():
             cohort_pad = notepad.add_subsection(cohort.name)
             for pp_info in cohort.phenopackets:
                 pp_pad = cohort_pad.add_subsection(pp_info.path)
