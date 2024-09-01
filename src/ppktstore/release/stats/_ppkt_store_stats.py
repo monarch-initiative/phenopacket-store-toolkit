@@ -134,6 +134,28 @@ class PPKtStoreStats:
         for k, v in disease_to_count_d.items():
             items.append({"disease": k, "count": v})
         return pd.DataFrame(items, index=None)
+    
+    def get_disease_count_table(self) -> pd.DataFrame:
+        """
+        Returns a Pandas table with disease labels and identifiers, sorted by size of cohort.
+        """
+        disease_to_count_d = defaultdict(int)
+        for cohort_info in self._store.cohorts():
+            for pp_info in cohort_info.phenopackets:
+                ppkt = pp_info.phenopacket
+                if len(ppkt.diseases) == 0:
+                    raise ValueError("Empty disease list")
+                if len(ppkt.diseases) != 1:
+                    print("Warning, number of diseases ", len(ppkt.diseases))
+                disease_term = (ppkt.diseases[0].term.id, ppkt.diseases[0].term.label)
+                disease_to_count_d[disease_term] += 1
+        items = list()
+        for k, v in disease_to_count_d.items():
+            items.append({"disease": k[1], "id": k[0], "count": v})
+        df = pd.DataFrame(items, index=None)
+        df_sorted = df.sort_values(by='count', ascending=False)
+        return df
+
 
     @staticmethod
     def _get_total_and_unique_hpo_counts(
