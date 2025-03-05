@@ -8,14 +8,13 @@ import pandas as pd
 from collections import defaultdict
 
 from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
-from phenopackets.schema.v2.core.base_pb2 import TimeElement, Age
 from phenopackets.schema.v2.core.interpretation_pb2 import Diagnosis
 from phenopackets.schema.v2.core.individual_pb2 import Sex, Individual, VitalStatus
 from phenopackets.schema.v2.core.meta_data_pb2 import MetaData
 
 from phenopackets.vrsatile.v1.vrsatile_pb2 import VariationDescriptor
 
-from ppktstore.model import PhenopacketStore
+from ppktstore.model import CohortInfo, PhenopacketStore
 
 
 iso_duration_pt = re.compile(
@@ -32,13 +31,13 @@ unit_to_days = {
 
 
 def summarize_diseases_and_genotype(
-    phenopacket_store: PhenopacketStore,
+    cohorts: typing.Union[PhenopacketStore, typing.Iterable[CohortInfo]],
 ) -> pd.DataFrame:
     """
     Create a summary table for all phenopackets of the store
     """
     data = defaultdict(list)
-    for cohort in phenopacket_store.cohorts():
+    for cohort in (cohorts.cohorts() if isinstance(cohorts, PhenopacketStore) else cohorts):
         for pp_info in cohort.phenopackets:
             pp = pp_info.phenopacket
             for interpretation in pp.interpretations:

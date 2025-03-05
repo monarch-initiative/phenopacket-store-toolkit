@@ -163,7 +163,7 @@ class PhenopacketStoreArchiver:
 
         # Create the summary TSV
         summary_filename = os.path.join(top_level, "phenopacket_store.summary.tsv")
-        summary_df = summarize_diseases_and_genotype(store)
+        summary_df = summarize_diseases_and_genotype(store.cohorts())
         summary_df.to_csv(
             summary_filename,
             sep="\t",
