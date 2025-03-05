@@ -353,8 +353,8 @@ class PPKtStoreStats:
 
     def get_gene_to_phenopacket_count_d(self) -> typing.Dict[str, int]:
         gene_to_ppkt_count_d = defaultdict(int)
-        for ppkt_list in self._cohort_to_phenopacket_d.values():
-            for ppkt in ppkt_list:
+        for cohort in self._store.cohorts():
+            for ppkt in cohort.iter_phenopackets():
                 gene_symbol = self._get_gene_symbol(ppkt=ppkt)
                 if gene_symbol is not None:
                     gene_to_ppkt_count_d[gene_symbol] += 1

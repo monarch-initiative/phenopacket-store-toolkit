@@ -15,7 +15,8 @@ from ._zip_util import relative_to
 
 class PhenopacketInfo(metaclass=abc.ABCMeta):
     """
-    Phenopacket plus metadata.
+    Phenopacket info includes a phenopacket plus metadata,
+    which at this time is just a relative path wrt. the enclosing cohort.
     """
 
     @property
@@ -40,8 +41,24 @@ class EagerPhenopacketInfo(PhenopacketInfo):
     """
 
     @staticmethod
-    def from_path(path: str, pp_path: pathlib.Path):
+    def from_path(
+        path: str,
+        pp_path: pathlib.Path,
+    ) -> "EagerPhenopacketInfo":
+        """
+        Load phenopacket from a `pp_path`.
+        """
         pp = Parse(pp_path.read_text(), Phenopacket())
+        return EagerPhenopacketInfo.from_phenopacket(path, pp)
+    
+    @staticmethod
+    def from_phenopacket(
+        path: str,
+        pp: Phenopacket,
+    ) -> "EagerPhenopacketInfo":
+        """
+        Create `EagerPhenopacketInfo` from a provided phenopacket.
+        """
         return EagerPhenopacketInfo(path, pp)
 
     def __init__(
@@ -102,7 +119,7 @@ class CohortInfo:
 
     def iter_phenopackets(self) -> typing.Iterator[Phenopacket]:
         """
-        Get an iterator with all phenopackets of the cohort.
+        Get an iterator with all phenopackets belonging to the cohort.
         """
         return map(lambda pi: pi.phenopacket, self.phenopackets)
 
@@ -121,7 +138,7 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
     def from_release_zip(
         zip_file: zipfile.ZipFile,
         strategy: typing.Literal["eager", "lazy"] = "eager",
-    ):
+    ) -> "PhenopacketStore":
         """
         Read `PhenopacketStore` from a release ZIP archive.
 
@@ -133,12 +150,15 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         ^^^^^^^^
 
         The phenopackets can be loaded in an *eager* or *lazy* fashion.
-        The `'eager'` strategy will load all phenopackets during the load
-        at the expense of the loading time and higher RAM usage.
+        
+        The `'eager'` strategy loads *all* phenopackets during the execution
+        of this function. This may do more work than necessary,
+        especially if only several cohorts are needed.
+        
         The `'lazy'` strategy only scans the ZIP for phenopackets
-        and the phenopacket parsing is done on demand, only when accessing
+        and the actual parsing is done on demand, when accessing
         the :attr:`PhenopacketInfo.phenopacket` property.
-        In result, the lazy loading will only succeed if the ZIP handle is opened.
+        In result, the lazy loading will only succeed if the ZIP handle is kept open.
 
         .. note::
 
@@ -211,7 +231,8 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
                 cohorts.append(ci)
 
         path = pathlib.Path(str(root))
-        return DefaultPhenopacketStore(
+
+        return PhenopacketStore.from_cohorts(
             name=name,
             path=path,
             cohorts=cohorts,
@@ -221,7 +242,7 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
     def from_notebook_dir(
         nb_dir: str,
         pp_dir: str = "phenopackets",
-    ):
+    ) -> "PhenopacketStore":
         """
         Create `PhenopacketStore` from Phenopacket store notebook dir `nb_dir`.
 
@@ -257,9 +278,28 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
                         )
                     )
 
-        return DefaultPhenopacketStore(
+        return PhenopacketStore.from_cohorts(
             name=nb_path.name,
             path=nb_path,
+            cohorts=cohorts,
+        )
+
+    @staticmethod
+    def from_cohorts(
+        name: str,
+        path: pathlib.Path,
+        cohorts: typing.Iterable[CohortInfo],
+    ) -> "PhenopacketStore":
+        """
+        Create `PhenopacketStore` from cohorts.
+
+        :param name: a `str` with the store name (e.g. `v0.1.23` or any other `str` will do).
+        :param path: a path to the store root to resolve phenopacket locations.
+        :param cohorts: an iterable with cohorts.
+        """
+        return DefaultPhenopacketStore(
+            name=name,
+            path=path,
             cohorts=cohorts,
         )
 
