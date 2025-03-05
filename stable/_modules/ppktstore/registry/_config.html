@@ -1,26 +1,24 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ppktstore.registry._config &mdash; phenopacket-store-toolkit 0.1.4 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../../_static/phenopacket-store-toolkit.css?v=a9fa5eb9" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=fd825880"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -37,9 +35,6 @@
           <a href="../../../index.html" class="icon icon-home">
             phenopacket-store-toolkit
           </a>
-              <div class="version">
-                0.1
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -80,19 +75,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ppktstore.registry._config</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">platform</span>
-<span class="kn">import</span> <span class="nn">typing</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
 
-<span class="kn">from</span> <span class="nn">._api</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._api</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">PhenopacketStoreRegistry</span><span class="p">,</span>
     <span class="n">PhenopacketStoreReleaseService</span><span class="p">,</span>
     <span class="n">RemotePhenopacketStoreService</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">._github</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._github</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">GitHubPhenopacketStoreReleaseService</span><span class="p">,</span>
     <span class="n">GitHubRemotePhenopacketStoreService</span><span class="p">,</span>
 <span class="p">)</span>
@@ -100,7 +95,7 @@
 
 <div class="viewcode-block" id="configure_phenopacket_registry">
 <a class="viewcode-back" href="../../../apidocs/ppktstore.registry.html#ppktstore.registry.configure_phenopacket_registry">[docs]</a>
-<span class="k">def</span> <span class="nf">configure_phenopacket_registry</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">configure_phenopacket_registry</span><span class="p">(</span>
     <span class="n">store_dir</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">release_service</span><span class="p">:</span> <span class="n">PhenopacketStoreReleaseService</span> <span class="o">=</span> <span class="n">GitHubPhenopacketStoreReleaseService</span><span class="p">(),</span>
     <span class="n">remote_phenopacket_store_service</span><span class="p">:</span> <span class="n">RemotePhenopacketStoreService</span> <span class="o">=</span> <span class="n">GitHubRemotePhenopacketStoreService</span><span class="p">(),</span>
@@ -136,7 +131,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">get_default_ontology_store_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_default_ontology_store_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a platform specific absolute path to the data directory.</span>
 
