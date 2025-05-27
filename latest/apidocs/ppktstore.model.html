@@ -225,8 +225,13 @@ In result, the lazy loading will only succeed if the ZIP handle is kept open.</p
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_notebook_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nb_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'phenopackets'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ppktstore.model.PhenopacketStore" title="ppktstore.model.PhenopacketStore"><span class="pre">PhenopacketStore</span></a></span></span><a class="reference internal" href="../_modules/ppktstore/model.html#PhenopacketStore.from_notebook_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.PhenopacketStore.from_notebook_dir" title="Link to this definition"></a></dt>
 <dd><p>Create <cite>PhenopacketStore</cite> from Phenopacket store notebook dir <cite>nb_dir</cite>.</p>
 <p>We expect the <cite>nb_dir</cite> to include a folder per cohort,
-and the phenopackets should be stored in <cite>nb_dir</cite> sub-folder (<code class="docutils literal notranslate"><span class="pre">nb_dir=phenopackets</span></code> by default).</p>
+and the phenopackets should be stored in <cite>pp_dir</cite> sub-folder (<code class="docutils literal notranslate"><span class="pre">pp_dir=&quot;phenopackets&quot;</span></code> by default).</p>
 <p>The phenopackets are loaded <em>eagerly</em> into memory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function is intended for private use only and we encourage
+using the Phenopacket Store registry API presented in <a class="reference internal" href="../user-guide/load-phenopacket-store.html#load-phenopacket-store"><span class="std std-ref">Load Phenopacket Store</span></a> section.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">

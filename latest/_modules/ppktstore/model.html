@@ -349,9 +349,14 @@
 <span class="sd">        Create `PhenopacketStore` from Phenopacket store notebook dir `nb_dir`.</span>
 
 <span class="sd">        We expect the `nb_dir` to include a folder per cohort,</span>
-<span class="sd">        and the phenopackets should be stored in `nb_dir` sub-folder (``nb_dir=phenopackets`` by default).</span>
+<span class="sd">        and the phenopackets should be stored in `pp_dir` sub-folder (``pp_dir=&quot;phenopackets&quot;`` by default).</span>
 
 <span class="sd">        The phenopackets are loaded *eagerly* into memory.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">          The function is intended for private use only and we encourage</span>
+<span class="sd">          using the Phenopacket Store registry API presented in :ref:`load-phenopacket-store` section.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cohorts</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">nb_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">nb_dir</span><span class="p">)</span>
