@@ -247,7 +247,7 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         Create `PhenopacketStore` from Phenopacket store notebook dir `nb_dir`.
 
         We expect the `nb_dir` to include a folder per cohort,
-        and the phenopackets should be stored in `pp_dir` sub-folder (``pp_dir=phenopackets`` by default).
+        and the phenopackets should be stored in `pp_dir` sub-folder (``pp_dir="phenopackets"`` by default).
 
         The phenopackets are loaded *eagerly* into memory.
 
