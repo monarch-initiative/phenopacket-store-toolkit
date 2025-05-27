@@ -247,9 +247,14 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         Create `PhenopacketStore` from Phenopacket store notebook dir `nb_dir`.
 
         We expect the `nb_dir` to include a folder per cohort,
-        and the phenopackets should be stored in `nb_dir` sub-folder (``nb_dir=phenopackets`` by default).
+        and the phenopackets should be stored in `pp_dir` sub-folder (``pp_dir="phenopackets"`` by default).
 
         The phenopackets are loaded *eagerly* into memory.
+
+        .. note::
+
+          The function is intended for private use only and we encourage
+          using the Phenopacket Store registry API presented in :ref:`load-phenopacket-store` section.
         """
         cohorts = []
         nb_path = pathlib.Path(nb_dir)
