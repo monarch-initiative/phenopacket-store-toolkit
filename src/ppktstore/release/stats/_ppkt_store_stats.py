@@ -9,7 +9,7 @@ import pandas as pd
 
 from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
 
-from ppktstore.model import PhenopacketStore
+from phenosentry.model import PhenopacketStore
 
 from ._summary import summarize_diseases_and_genotype
 

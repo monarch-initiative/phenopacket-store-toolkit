@@ -4,7 +4,7 @@ import sys
 
 import ppktstore
 import ppktstore.release
-
+from phenosentry.model import PhenopacketStore
 
 def main(argv) -> int:
     """
@@ -48,12 +48,6 @@ def main(argv) -> int:
         help="where to write the release archive",
     )
 
-    # #################### ------------- `qc` ------------------ ####################
-    parser_check = subparsers.add_parser("qc", help="Q/C phenopackets")
-    parser_check.add_argument(
-        "--notebook-dir", default="notebooks", help="path to cohorts directory"
-    )
-
     # #################### ------------- `report` -------------- ####################
     report = subparsers.add_parser("report", help="Generate reports")
     subparsers_report = report.add_subparsers(dest="report_command")
@@ -86,23 +80,22 @@ def main(argv) -> int:
             logger=logger,
         )
         from ppktstore.release.archive import package_phenopackets
+        from phenosentry.validation import qc_phenopackets
+
+        validated = qc_phenopackets(
+            store=store,
+            logger=logger,
+        )
+
+        if validated:
+            logger.error("Phenopackets validation failed. Cannot package.")
+            return 1
 
         return package_phenopackets(
             store=store,
             formats=args.format,
             filename=args.output,
             release_tag=args.release_tag,
-            logger=logger,
-        )
-    elif args.command == "qc":
-        store = read_phenopacket_store(
-            notebook_dir=args.notebook_dir,
-            logger=logger,
-        )
-        from ppktstore.release.qc import qc_phenopackets
-
-        return qc_phenopackets(
-            store=store,
             logger=logger,
         )
     elif args.command == "report":
@@ -126,9 +119,9 @@ def main(argv) -> int:
 def read_phenopacket_store(
     notebook_dir: str,
     logger: logging.Logger,
-) -> ppktstore.model.PhenopacketStore:
+) -> PhenopacketStore:
     logger.info("Reading phenopackets at `%s`", notebook_dir)
-    phenopacket_store = ppktstore.model.PhenopacketStore.from_notebook_dir(notebook_dir)
+    phenopacket_store = PhenopacketStore.from_notebook_dir(notebook_dir)
     logger.info(
         "Read %d cohorts with %d phenopackets",
         phenopacket_store.cohort_count(),

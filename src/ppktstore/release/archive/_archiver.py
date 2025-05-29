@@ -7,7 +7,7 @@ import tarfile
 import tempfile
 import typing
 
-from ppktstore.model import PhenopacketStore
+from phenosentry.model import PhenopacketStore
 from ..stats import summarize_diseases_and_genotype
 
 

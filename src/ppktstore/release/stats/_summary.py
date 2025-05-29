@@ -14,7 +14,7 @@ from phenopackets.schema.v2.core.meta_data_pb2 import MetaData
 
 from phenopackets.vrsatile.v1.vrsatile_pb2 import VariationDescriptor
 
-from ppktstore.model import CohortInfo, PhenopacketStore
+from phenosentry.model import CohortInfo, PhenopacketStore
 
 
 iso_duration_pt = re.compile(

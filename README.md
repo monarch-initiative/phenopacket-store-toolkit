@@ -59,14 +59,7 @@ by adding `release` profile:
 python3 -m pip install phenopacket-store-toolkit[release]
 ```
 
-Now, assuming that `notebooks` points to the notebook folder of the Phenopacket Store repository,
-we can Q/C the phenopackets by running:
-
-```shell
-python3 -m ppktstore qc --notebook-dir notebooks
-```
-
-and we can create the release archive by running:
+and we can create and validate the release archive by running:
 
 ```shell
 python3 -m ppktstore package --notebook-dir notebooks --release-tag 0.1.18 --output all_phenopackets
