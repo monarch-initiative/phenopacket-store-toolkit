@@ -4,7 +4,7 @@ import sys
 
 import ppktstore
 import ppktstore.release
-from phenosentry.model import PhenopacketStore
+from .model import PhenopacketStore
 
 def main(argv) -> int:
     """
@@ -80,9 +80,9 @@ def main(argv) -> int:
             logger=logger,
         )
         from ppktstore.release.archive import package_phenopackets
-        from phenosentry.validation import qc_phenopackets
+        from phenosentry.validation import qc_phenopacket_store
 
-        validated = qc_phenopackets(
+        validated = qc_phenopacket_store(
             store=store,
             logger=logger,
         )

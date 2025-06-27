@@ -10,5 +10,6 @@ __version__ = "0.1.5.dev0"
 
 __all__ = [
     "registry",
-    "release"
+    "model",
+    "validation"
 ]

@@ -8,7 +8,7 @@ import shutil
 import typing
 import zipfile
 
-from phenosentry.model import PhenopacketStore
+from ppktstore.model import PhenopacketStore
 
 
 SEMVER_VERSION_PT = re.compile(

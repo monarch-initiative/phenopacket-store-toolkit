@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from phenosentry.model import PhenopacketStore
+from ppktstore.model import PhenopacketStore
 from ppktstore.release.archive import PhenopacketStoreArchiver, ArchiveFormat
 
 

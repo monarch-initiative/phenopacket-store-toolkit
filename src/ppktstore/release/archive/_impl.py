@@ -1,7 +1,7 @@
 import logging
 import typing
 
-from phenosentry.model import PhenopacketStore
+from ppktstore.model import PhenopacketStore
 
 from ._archiver import PhenopacketStoreArchiver, ArchiveFormat
 
