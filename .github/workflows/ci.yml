@@ -24,4 +24,4 @@ jobs:
             python3 -m pip install --editable .[test,release]
         - name: Run tests
           run: |
-            pytest
+            pytest -vv
