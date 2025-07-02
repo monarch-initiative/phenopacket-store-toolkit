@@ -37,3 +37,58 @@ We can load phenopackets for a cohort name (e.g. *SUOX*). The phenopackets are l
 and we collect them into a list. 
 
 We loaded 35 phenopackets!
+
+
+Export a phenopacket cohort
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Phenopackets of a cohort can easily be exported into a directory for further processing.
+The export is implemented on the :class:`~ppktstore.model.CohortInfo` class of the Phenopacket Store API:
+
+>>> outdir = "dev/SUOX"
+>>> with registry.open_phenopacket_store(release="0.1.18") as ps:
+...     cohort = ps.cohort_for_name("SUOX")
+...     cohort.export_phenopackets_to_directory(outdir)
+
+We open Phenopacket Store and get the :class:`~ppktstore.model.CohortInfo` for the *SUOX* cohort.
+Then we export the phenopackets into a directory (e.g. ``"dev/SUOX"``)
+
+We can check if the phenopackets were exported:
+
+>>> import os
+>>> paths = sorted(os.listdir(outdir))
+>>> paths[:5]  # doctest: +NORMALIZE_WHITESPACE
+['PMID_36303223_individual_10_PMID_12112661.json',
+ 'PMID_36303223_individual_11_PMID_12112661.json',
+ 'PMID_36303223_individual_12_PMID_12112661.json',
+ 'PMID_36303223_individual_13_PMID_12112661.json',
+ 'PMID_36303223_individual_14_PMID_11825068.json']
+
+.. Clean up the folder
+.. doctest::
+  :hide:
+
+  >>> for fp in os.listdir(outdir): os.remove(os.path.join(outdir, fp))
+  >>> os.rmdir(outdir)
+
+By default, the phenopackets are stored in JSON format. However, Protobuf wire format is also supported:
+
+>>> with registry.open_phenopacket_store(release="0.1.18") as ps:
+...     cohort = ps.cohort_for_name("SUOX")
+...     cohort.export_phenopackets_to_directory(outdir, format="pb")
+>>> sorted(os.listdir(outdir))[:5] # doctest: +NORMALIZE_WHITESPACE
+['PMID_36303223_individual_10_PMID_12112661.pb',
+ 'PMID_36303223_individual_11_PMID_12112661.pb',
+ 'PMID_36303223_individual_12_PMID_12112661.pb',
+ 'PMID_36303223_individual_13_PMID_12112661.pb',
+ 'PMID_36303223_individual_14_PMID_11825068.pb']
+
+We use the ``format`` option to export phenopackets as Protobuf files.
+
+
+.. Clean up the folder
+.. doctest::
+  :hide:
+
+  >>> for fp in os.listdir(outdir): os.remove(os.path.join(outdir, fp))
+  >>> os.rmdir(outdir)
