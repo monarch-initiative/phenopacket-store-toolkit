@@ -1,10 +1,72 @@
+import os
+import pathlib
 import zipfile
+
+import pytest
 
 from ppktstore.model import PhenopacketStore, CohortInfo
 
 
-class TestPhenopacketStore:
+class TestCohortInfo:
+    @pytest.fixture(scope="class")
+    def cohort_info(
+        self,
+        phenopacket_store: PhenopacketStore,
+    ) -> CohortInfo:
+        return phenopacket_store.cohort_for_name("AXIN1")
 
+    def test_export_phenopackets_to_directory_pb(
+        self,
+        cohort_info: CohortInfo,
+        tmpdir: pathlib.Path,
+    ):
+        before = tuple(os.listdir(tmpdir))
+        assert len(before) == 0
+
+        cohort_info.export_phenopackets_to_directory(
+            tmpdir,
+            format="pb",
+        )
+
+        after = sorted(os.listdir(tmpdir))
+
+        assert after == [
+            "PMID_37582359_F1-II-1.pb",
+            "PMID_37582359_F1-II-4.pb",
+            "PMID_37582359_F2-III-2.pb",
+            "PMID_37582359_F3-III-1.pb",
+            "PMID_37582359_F4-III-1.pb",
+            "PMID_37582359_F4-III-3.pb",
+            "PMID_37582359_F4-III-4.pb",
+        ]
+
+    def test_export_phenopackets_to_directory_json(
+        self,
+        cohort_info: CohortInfo,
+        tmpdir: pathlib.Path,
+    ):
+        before = tuple(os.listdir(tmpdir))
+        assert len(before) == 0
+
+        cohort_info.export_phenopackets_to_directory(
+            tmpdir,
+            format="json",
+        )
+
+        after = sorted(os.listdir(tmpdir))
+
+        assert after == [
+            "PMID_37582359_F1-II-1.json",
+            "PMID_37582359_F1-II-4.json",
+            "PMID_37582359_F2-III-2.json",
+            "PMID_37582359_F3-III-1.json",
+            "PMID_37582359_F4-III-1.json",
+            "PMID_37582359_F4-III-3.json",
+            "PMID_37582359_F4-III-4.json",
+        ]
+
+
+class TestPhenopacketStore:
     def test_from_notebook_dir(
         self,
         fpath_nb_dir: str,
@@ -47,12 +109,19 @@ def check_aagab_cohort_specs(
     # on whether Phenopacket store is loaded from a notebook folder or from a release ZIP.
     assert len(cohort) == 3
 
-    pp_ids = set(pp_info.phenopacket.id for pp_info in cohort.phenopackets)
-    assert pp_ids == {
+    pp_paths = sorted(pp_info.path for pp_info in cohort.phenopackets)
+    assert pp_paths == [
+        "PMID_28239884_Family1proband",
+        "PMID_28239884_Family2proband",
+        "PMID_28239884_Family3proband",
+    ]
+
+    pp_ids = sorted(pp_info.phenopacket.id for pp_info in cohort.phenopackets)
+    assert pp_ids == [
         "PMID_28239884_Family_1_proband",
         "PMID_28239884_Family_2_proband",
         "PMID_28239884_Family_3_proband",
-    }
+    ]
 
 
 def check_axin1_cohort_specs(
@@ -63,13 +132,24 @@ def check_axin1_cohort_specs(
     # on whether Phenopacket store is loaded from a notebook folder or from a release ZIP.
     assert len(cohort) == 7
 
-    pp_ids = set(pp_info.phenopacket.id for pp_info in cohort.phenopackets)
-    assert pp_ids == {
+    pp_paths = sorted(pp_info.path for pp_info in cohort.phenopackets)
+    assert pp_paths == [
+        "PMID_37582359_F1-II-1",
         "PMID_37582359_F1-II-4",
         "PMID_37582359_F2-III-2",
-        "PMID_37582359_F4-III-3",
-        "PMID_37582359_F4-III-4",
-        "PMID_37582359_F1-II-1",
         "PMID_37582359_F3-III-1",
         "PMID_37582359_F4-III-1",
-    }
+        "PMID_37582359_F4-III-3",
+        "PMID_37582359_F4-III-4",
+    ]
+
+    pp_ids = sorted(pp_info.phenopacket.id for pp_info in cohort.phenopackets)
+    assert pp_ids == [
+        "PMID_37582359_F1-II-1",
+        "PMID_37582359_F1-II-4",
+        "PMID_37582359_F2-III-2",
+        "PMID_37582359_F3-III-1",
+        "PMID_37582359_F4-III-1",
+        "PMID_37582359_F4-III-3",
+        "PMID_37582359_F4-III-4",
+    ]
