@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Load Phenopacket Store &mdash; phenopacket-store-toolkit 0.1.4 documentation</title>
+  <title>Load Phenopacket Store &mdash; phenopacket-store-toolkit 0.1.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../_static/documentation_options.js?v=59fadc99"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -23,7 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API reference" href="../apidocs/modules.html" />
+    <link rel="next" title="Phenopacket Store Summary" href="summary.html" />
     <link rel="prev" title="User guide" href="index.html" /> 
 </head>
 
@@ -52,8 +52,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">User guide</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Load Phenopacket Store</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#load-a-single-phenopacket-cohort">Load a single phenopacket cohort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#export-a-phenopacket-cohort">Export a phenopacket cohort</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="summary.html">Phenopacket Store Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../apidocs/modules.html">API reference</a></li>
@@ -97,7 +99,7 @@ and for phenopacket I/O.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span> <span class="o">=</span> <span class="n">configure_phenopacket_registry</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>We created a <a class="reference internal" href="../apidocs/ppktstore.registry.html#ppktstore.registry.PhenopacketStoreRegistry" title="ppktstore.registry.PhenopacketStoreRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">ppktstore.registry.PhenopacketStoreRegistry</span></code></a> to manage the release files.
+<p>We created a <a class="reference internal" href="../apidocs/ppktstore.registry.html#ppktstore.registry.PhenopacketStoreRegistry" title="ppktstore.registry.PhenopacketStoreRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhenopacketStoreRegistry</span></code></a> to manage the release files.
 By default, the registry stores the release ZIP files at <code class="docutils literal notranslate"><span class="pre">$HOME/.phenopacket-store</span></code> for Unix,
 or <code class="docutils literal notranslate"><span class="pre">$HOME/phenopacket-store</span></code> for Windows.</p>
 <p>Now let’s load the phenopackets.</p>
@@ -109,10 +111,47 @@ or <code class="docutils literal notranslate"><span class="pre">$HOME/phenopacke
 </div>
 <p>We open Phenopacket Store with release <cite>0.1.18</cite>. Behind the scenes, the registry checks if the ZIP file
 has been previously downloaded. If absent, the ZIP file is fetched from GitHub.
-This is followed by opening the ZIP file and creating <a class="reference internal" href="../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore" title="ppktstore.model.PhenopacketStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">ppktstore.model.PhenopacketStore</span></code></a> (<code class="docutils literal notranslate"><span class="pre">ps</span></code>).
+This is followed by opening the ZIP file and creating <a class="reference internal" href="../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketStore" title="ppktstore.model.PhenopacketStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhenopacketStore</span></code></a> (<code class="docutils literal notranslate"><span class="pre">ps</span></code>).
 We can load phenopackets for a cohort name (e.g. <em>SUOX</em>). The phenopackets are loaded lazily,
 and we collect them into a list.</p>
 <p>We loaded 35 phenopackets!</p>
+</section>
+<section id="export-a-phenopacket-cohort">
+<h2>Export a phenopacket cohort<a class="headerlink" href="#export-a-phenopacket-cohort" title="Link to this heading"></a></h2>
+<p>Phenopackets of a cohort can easily be exported into a directory for further processing.
+The export is implemented on the <a class="reference internal" href="../apidocs/ppktstore.model.html#ppktstore.model.CohortInfo" title="ppktstore.model.CohortInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">CohortInfo</span></code></a> class of the Phenopacket Store API:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">outdir</span> <span class="o">=</span> <span class="s2">&quot;dev/SUOX&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">registry</span><span class="o">.</span><span class="n">open_phenopacket_store</span><span class="p">(</span><span class="n">release</span><span class="o">=</span><span class="s2">&quot;0.1.18&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ps</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">cohort</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">cohort_for_name</span><span class="p">(</span><span class="s2">&quot;SUOX&quot;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">cohort</span><span class="o">.</span><span class="n">export_phenopackets_to_directory</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We open Phenopacket Store and get the <a class="reference internal" href="../apidocs/ppktstore.model.html#ppktstore.model.CohortInfo" title="ppktstore.model.CohortInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">CohortInfo</span></code></a> for the <em>SUOX</em> cohort.
+Then we export the phenopackets into a directory (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;dev/SUOX&quot;</span></code>)</p>
+<p>We can check if the phenopackets were exported:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">outdir</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">paths</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="go">[&#39;PMID_36303223_individual_10_PMID_12112661.json&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_11_PMID_12112661.json&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_12_PMID_12112661.json&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_13_PMID_12112661.json&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_14_PMID_11825068.json&#39;]</span>
+</pre></div>
+</div>
+<p>By default, the phenopackets are stored in JSON format. However, Protobuf wire format is also supported:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">registry</span><span class="o">.</span><span class="n">open_phenopacket_store</span><span class="p">(</span><span class="n">release</span><span class="o">=</span><span class="s2">&quot;0.1.18&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ps</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">cohort</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">cohort_for_name</span><span class="p">(</span><span class="s2">&quot;SUOX&quot;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">cohort</span><span class="o">.</span><span class="n">export_phenopackets_to_directory</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pb&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">outdir</span><span class="p">))[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="go">[&#39;PMID_36303223_individual_10_PMID_12112661.pb&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_11_PMID_12112661.pb&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_12_PMID_12112661.pb&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_13_PMID_12112661.pb&#39;,</span>
+<span class="go"> &#39;PMID_36303223_individual_14_PMID_11825068.pb&#39;]</span>
+</pre></div>
+</div>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">format</span></code> option to export phenopackets as Protobuf files.</p>
 </section>
 </section>
 
@@ -121,13 +160,13 @@ and we collect them into a list.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="User guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../apidocs/modules.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="summary.html" class="btn btn-neutral float-right" title="Phenopacket Store Summary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024.</p>
+    <p>&#169; Copyright 2025.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
