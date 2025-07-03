@@ -171,6 +171,25 @@ which at this time is just a relative path wrt. the enclosing cohort.</p>
 <dd><p>Get an iterator with all phenopackets belonging to the cohort.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="ppktstore.model.CohortInfo.export_phenopackets_to_directory">
+<span class="sig-name descname"><span class="pre">export_phenopackets_to_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'pb'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'json'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ppktstore/model.html#CohortInfo.export_phenopackets_to_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ppktstore.model.CohortInfo.export_phenopackets_to_directory" title="Link to this definition"></a></dt>
+<dd><p>Export the phenopackets into a directory.</p>
+<p>Each phenopacket is exported into a single file.
+The directory is created if it does not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – path to the output directory.</p></li>
+<li><p><strong>format</strong> – phenopacket file format, one of <code class="docutils literal notranslate"><span class="pre">{&quot;pb&quot;,</span> <span class="pre">&quot;json&quot;}</span></code> for Protobuf and JSON format, respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – if <cite>output</cite> does not point to a directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

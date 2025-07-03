@@ -79,6 +79,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 
@@ -89,6 +90,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._zip_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">relative_to</span>
 
+<span class="n">_FILEFORMAT_SUFFIXES</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.(json|pb)$&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PhenopacketInfo">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketInfo">[docs]</a>
@@ -135,7 +137,7 @@
         <span class="n">pp</span> <span class="o">=</span> <span class="n">Parse</span><span class="p">(</span><span class="n">pp_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(),</span> <span class="n">Phenopacket</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">EagerPhenopacketInfo</span><span class="o">.</span><span class="n">from_phenopacket</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pp</span><span class="p">)</span></div>
 
-    
+
 <div class="viewcode-block" id="EagerPhenopacketInfo.from_phenopacket">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.EagerPhenopacketInfo.from_phenopacket">[docs]</a>
     <span class="nd">@staticmethod</span>
@@ -217,6 +219,45 @@
         <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">pi</span><span class="p">:</span> <span class="n">pi</span><span class="o">.</span><span class="n">phenopacket</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="CohortInfo.export_phenopackets_to_directory">
+<a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.CohortInfo.export_phenopackets_to_directory">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_phenopackets_to_directory</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="nb">format</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;pb&quot;</span><span class="p">,</span> <span class="s2">&quot;json&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the phenopackets into a directory.</span>
+
+<span class="sd">        Each phenopacket is exported into a single file.</span>
+<span class="sd">        The directory is created if it does not exist.</span>
+
+<span class="sd">        :param path: path to the output directory.</span>
+<span class="sd">        :param format: phenopacket file format, one of ``{&quot;pb&quot;, &quot;json&quot;}`` for Protobuf and JSON format, respectively.</span>
+<span class="sd">        :raises ValueError: if `output` does not point to a directory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> does is not a directory&quot;</span><span class="p">)</span>
+        
+        <span class="k">match</span> <span class="nb">format</span><span class="p">:</span>
+            <span class="k">case</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.json_format</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageToJson</span>
+                <span class="k">for</span> <span class="n">pi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">:</span>
+                    <span class="n">fpath_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pi</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath_out</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">MessageToJson</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">phenopacket</span><span class="p">))</span>
+            <span class="k">case</span> <span class="s2">&quot;pb&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">:</span>
+                    <span class="n">fpath_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pi</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">.pb&quot;</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath_out</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">phenopacket</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">())</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid format </span><span class="si">{</span><span class="nb">format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">)</span></div>
 
@@ -249,11 +290,11 @@
 <span class="sd">        ^^^^^^^^</span>
 
 <span class="sd">        The phenopackets can be loaded in an *eager* or *lazy* fashion.</span>
-<span class="sd">        </span>
+
 <span class="sd">        The `&#39;eager&#39;` strategy loads *all* phenopackets during the execution</span>
 <span class="sd">        of this function. This may do more work than necessary,</span>
 <span class="sd">        especially if only several cohorts are needed.</span>
-<span class="sd">        </span>
+
 <span class="sd">        The `&#39;lazy&#39;` strategy only scans the ZIP for phenopackets</span>
 <span class="sd">        and the actual parsing is done on demand, when accessing</span>
 <span class="sd">        the :attr:`PhenopacketInfo.phenopacket` property.</span>
@@ -287,12 +328,12 @@
             <span class="n">entry_path</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">zip_file</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
                 <span class="n">entry_parent</span> <span class="o">=</span> <span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">entry_parent</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">entry_parent</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">):</span>
                     <span class="n">name</span> <span class="o">=</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">name</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">cohort_name</span> <span class="o">=</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">name</span>
                     <span class="n">cohort2path</span><span class="p">[</span><span class="n">cohort_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry_path</span>
-            <span class="k">elif</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
                 <span class="c1"># This SHOULD be a phenopacket!</span>
                 <span class="n">cohort</span> <span class="o">=</span> <span class="n">entry_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># type: ignore</span>
                 <span class="n">cohort2pp_paths</span><span class="p">[</span><span class="n">cohort</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry_path</span><span class="p">)</span>
@@ -301,18 +342,15 @@
         <span class="n">cohorts</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">cohort</span><span class="p">,</span> <span class="n">cohort_path</span> <span class="ow">in</span> <span class="n">cohort2path</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">cohort</span> <span class="ow">in</span> <span class="n">cohort2pp_paths</span><span class="p">:</span>
-                <span class="c1"># cohort_path.relative_to(root)</span>
-                <span class="n">at</span> <span class="o">=</span> <span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">cohort_path</span><span class="p">)</span>
+                <span class="n">at</span> <span class="o">=</span> <span class="n">relative_to</span><span class="p">(</span><span class="n">cohort_path</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
                 <span class="n">rel_cohort_path</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span>
-                    <span class="n">zip_file</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="n">at</span><span class="p">,</span>
+                    <span class="n">zip_file</span><span class="p">,</span>
+                    <span class="n">at</span><span class="o">=</span><span class="n">at</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">pp_infos</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">pp_path</span> <span class="ow">in</span> <span class="n">cohort2pp_paths</span><span class="p">[</span><span class="n">cohort</span><span class="p">]:</span>
-                    <span class="c1"># cohort_path_str = str(cohort_path)</span>
-                    <span class="c1"># pp_path_str = str(pp_path)</span>
-                    <span class="c1"># path = pp_path_str.replace(cohort_path_str, &#39;&#39;)</span>
-                    <span class="n">path</span> <span class="o">=</span> <span class="n">relative_to</span><span class="p">(</span><span class="n">cohort_path</span><span class="p">,</span> <span class="n">pp_path</span><span class="p">)</span>
-                    <span class="c1"># path = pp_path.relative_to(cohort_path)</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">relative_to</span><span class="p">(</span><span class="n">pp_path</span><span class="p">,</span> <span class="n">cohort_path</span><span class="p">)</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">_FILEFORMAT_SUFFIXES</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;eager&quot;</span><span class="p">:</span>
                         <span class="n">pi</span> <span class="o">=</span> <span class="n">EagerPhenopacketInfo</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pp_path</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">&quot;lazy&quot;</span><span class="p">:</span>
@@ -370,9 +408,10 @@
                     <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">cohort_path</span><span class="p">):</span>
                         <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
                             <span class="n">filepath</span> <span class="o">=</span> <span class="n">cohort_path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                            <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">_FILEFORMAT_SUFFIXES</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
                             <span class="n">pp</span> <span class="o">=</span> <span class="n">Parse</span><span class="p">(</span><span class="n">filepath</span><span class="o">.</span><span class="n">read_text</span><span class="p">(),</span> <span class="n">Phenopacket</span><span class="p">())</span>
                             <span class="n">pi</span> <span class="o">=</span> <span class="n">EagerPhenopacketInfo</span><span class="p">(</span>
-                                <span class="n">path</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
+                                <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
                                 <span class="n">phenopacket</span><span class="o">=</span><span class="n">pp</span><span class="p">,</span>
                             <span class="p">)</span>
                             <span class="n">pp_infos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
@@ -503,7 +542,6 @@
 <div class="viewcode-block" id="DefaultPhenopacketStore">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.DefaultPhenopacketStore">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DefaultPhenopacketStore</span><span class="p">(</span><span class="n">PhenopacketStore</span><span class="p">):</span>
-
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
