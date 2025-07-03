@@ -134,6 +134,29 @@ class PPKtStoreStats:
         for k, v in disease_to_count_d.items():
             items.append({"disease": k, "count": v})
         return pd.DataFrame(items, index=None)
+    
+    def get_disease_count_table(self) -> pd.DataFrame:
+        """
+        Returns a Pandas table with disease labels and identifiers, sorted by size of cohort.
+        """
+        disease_to_count_d = defaultdict(int)
+        for cohort_info in self._store.cohorts():
+            for pp_info in cohort_info.phenopackets:
+                ppkt = pp_info.phenopacket
+                if len(ppkt.diseases) == 0:
+                    raise ValueError("Empty disease list")
+                if len(ppkt.diseases) != 1:
+                    print("Warning, number of diseases ", len(ppkt.diseases))
+                disease_term = (ppkt.diseases[0].term.id, ppkt.diseases[0].term.label, cohort_info.name)
+                disease_to_count_d[disease_term] += 1
+        items = list()
+        for k, v in disease_to_count_d.items():
+            items.append({"disease": k[1], "id": k[0], "cohort":k[2], "count": v})
+        df = pd.DataFrame(items, index=None)
+        df_sorted = df.sort_values(by='count', ascending=False)
+        df_sorted.reset_index(drop=True, inplace=True)
+        return df_sorted
+
 
     @staticmethod
     def _get_total_and_unique_hpo_counts(
@@ -330,8 +353,8 @@ class PPKtStoreStats:
 
     def get_gene_to_phenopacket_count_d(self) -> typing.Dict[str, int]:
         gene_to_ppkt_count_d = defaultdict(int)
-        for ppkt_list in self._cohort_to_phenopacket_d.values():
-            for ppkt in ppkt_list:
+        for cohort in self._store.cohorts():
+            for ppkt in cohort.iter_phenopackets():
                 gene_symbol = self._get_gene_symbol(ppkt=ppkt)
                 if gene_symbol is not None:
                     gene_to_ppkt_count_d[gene_symbol] += 1

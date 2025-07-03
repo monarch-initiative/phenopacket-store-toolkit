@@ -163,7 +163,7 @@ class PhenopacketStoreArchiver:
 
         # Create the summary TSV
         summary_filename = os.path.join(top_level, "phenopacket_store.summary.tsv")
-        summary_df = summarize_diseases_and_genotype(store)
+        summary_df = summarize_diseases_and_genotype(store.cohorts())
         summary_df.to_csv(
             summary_filename,
             sep="\t",
@@ -190,7 +190,7 @@ class PhenopacketStoreArchiver:
             # original files
             cohort_path = store.path.joinpath(cohort_info.path)
             for pp_info in cohort_info.phenopackets:
-                pp_path = cohort_path.joinpath(pp_info.path)
+                pp_path = cohort_path.joinpath(f"{pp_info.path}.json")
                 shutil.copy(pp_path, temp_cohort_dir)
                 n_copied_files += 1
         return n_copied_files

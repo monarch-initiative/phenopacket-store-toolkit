@@ -2,6 +2,7 @@ import abc
 import dataclasses
 import os
 import pathlib
+import re
 import typing
 import zipfile
 
@@ -12,10 +13,12 @@ from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
 
 from ._zip_util import relative_to
 
+_FILEFORMAT_SUFFIXES = re.compile(r"\.(json|pb)$")
 
 class PhenopacketInfo(metaclass=abc.ABCMeta):
     """
-    Phenopacket plus metadata.
+    Phenopacket info includes a phenopacket plus metadata,
+    which at this time is just a relative path wrt. the enclosing cohort.
     """
 
     @property
@@ -40,8 +43,24 @@ class EagerPhenopacketInfo(PhenopacketInfo):
     """
 
     @staticmethod
-    def from_path(path: str, pp_path: pathlib.Path):
+    def from_path(
+        path: str,
+        pp_path: pathlib.Path,
+    ) -> "EagerPhenopacketInfo":
+        """
+        Load phenopacket from a `pp_path`.
+        """
         pp = Parse(pp_path.read_text(), Phenopacket())
+        return EagerPhenopacketInfo.from_phenopacket(path, pp)
+
+    @staticmethod
+    def from_phenopacket(
+        path: str,
+        pp: Phenopacket,
+    ) -> "EagerPhenopacketInfo":
+        """
+        Create `EagerPhenopacketInfo` from a provided phenopacket.
+        """
         return EagerPhenopacketInfo(path, pp)
 
     def __init__(
@@ -102,9 +121,45 @@ class CohortInfo:
 
     def iter_phenopackets(self) -> typing.Iterator[Phenopacket]:
         """
-        Get an iterator with all phenopackets of the cohort.
+        Get an iterator with all phenopackets belonging to the cohort.
         """
         return map(lambda pi: pi.phenopacket, self.phenopackets)
+
+    def export_phenopackets_to_directory(
+        self,
+        path: typing.Union[pathlib.Path, str],
+        format: typing.Literal["pb", "json"] = "json",
+    ):
+        """
+        Export the phenopackets into a directory.
+
+        Each phenopacket is exported into a single file.
+        The directory is created if it does not exist.
+
+        :param path: path to the output directory.
+        :param format: phenopacket file format, one of ``{"pb", "json"}`` for Protobuf and JSON format, respectively.
+        :raises ValueError: if `output` does not point to a directory.
+        """
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+        
+        if not os.path.isdir(path):
+            raise ValueError(f"output {path} does is not a directory")
+        
+        match format:
+            case "json":
+                from google.protobuf.json_format import MessageToJson
+                for pi in self.phenopackets:
+                    fpath_out = os.path.join(path, f"{pi.path}.json")
+                    with open(fpath_out, "w") as fh:
+                        fh.write(MessageToJson(pi.phenopacket))
+            case "pb":
+                for pi in self.phenopackets:
+                    fpath_out = os.path.join(path, f"{pi.path}.pb")
+                    with open(fpath_out, "wb") as fh:
+                        fh.write(pi.phenopacket.SerializeToString())
+            case _:
+                raise ValueError(f"Invalid format {format}")
 
     def __len__(self) -> int:
         return len(self.phenopackets)
@@ -121,7 +176,7 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
     def from_release_zip(
         zip_file: zipfile.ZipFile,
         strategy: typing.Literal["eager", "lazy"] = "eager",
-    ):
+    ) -> "PhenopacketStore":
         """
         Read `PhenopacketStore` from a release ZIP archive.
 
@@ -133,12 +188,15 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         ^^^^^^^^
 
         The phenopackets can be loaded in an *eager* or *lazy* fashion.
-        The `'eager'` strategy will load all phenopackets during the load
-        at the expense of the loading time and higher RAM usage.
+
+        The `'eager'` strategy loads *all* phenopackets during the execution
+        of this function. This may do more work than necessary,
+        especially if only several cohorts are needed.
+
         The `'lazy'` strategy only scans the ZIP for phenopackets
-        and the phenopacket parsing is done on demand, only when accessing
+        and the actual parsing is done on demand, when accessing
         the :attr:`PhenopacketInfo.phenopacket` property.
-        In result, the lazy loading will only succeed if the ZIP handle is opened.
+        In result, the lazy loading will only succeed if the ZIP handle is kept open.
 
         .. note::
 
@@ -168,12 +226,12 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
             entry_path = zipfile.Path(zip_file, at=entry.filename)
             if entry_path.is_dir():
                 entry_parent = relative_to(root, entry_path.parent)
-                if entry_parent in ('', '.'):
+                if entry_parent in ("", "."):
                     name = entry_path.name
                 else:
                     cohort_name = entry_path.name
                     cohort2path[cohort_name] = entry_path
-            elif entry_path.is_file() and entry_path.name.endswith('.json'):
+            elif entry_path.is_file() and entry_path.name.endswith(".json"):
                 # This SHOULD be a phenopacket!
                 cohort = entry_path.parent.name  # type: ignore
                 cohort2pp_paths[cohort].append(entry_path)
@@ -182,18 +240,15 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
         cohorts = []
         for cohort, cohort_path in cohort2path.items():
             if cohort in cohort2pp_paths:
-                # cohort_path.relative_to(root)
-                at = relative_to(root, cohort_path)
+                at = relative_to(cohort_path, root)
                 rel_cohort_path = zipfile.Path(
-                    zip_file, at=at,
+                    zip_file,
+                    at=at,
                 )
                 pp_infos = []
                 for pp_path in cohort2pp_paths[cohort]:
-                    # cohort_path_str = str(cohort_path)
-                    # pp_path_str = str(pp_path)
-                    # path = pp_path_str.replace(cohort_path_str, '')
-                    path = relative_to(cohort_path, pp_path)
-                    # path = pp_path.relative_to(cohort_path)
+                    path = relative_to(pp_path, cohort_path)
+                    path = re.sub(_FILEFORMAT_SUFFIXES, "", path)
                     if strategy == "eager":
                         pi = EagerPhenopacketInfo.from_path(path, pp_path)
                     elif strategy == "lazy":
@@ -211,7 +266,8 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
                 cohorts.append(ci)
 
         path = pathlib.Path(str(root))
-        return DefaultPhenopacketStore(
+
+        return PhenopacketStore.from_cohorts(
             name=name,
             path=path,
             cohorts=cohorts,
@@ -221,14 +277,19 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
     def from_notebook_dir(
         nb_dir: str,
         pp_dir: str = "phenopackets",
-    ):
+    ) -> "PhenopacketStore":
         """
         Create `PhenopacketStore` from Phenopacket store notebook dir `nb_dir`.
 
         We expect the `nb_dir` to include a folder per cohort,
-        and the phenopackets should be stored in `nb_dir` sub-folder (``nb_dir=phenopackets`` by default).
+        and the phenopackets should be stored in `pp_dir` sub-folder (``pp_dir="phenopackets"`` by default).
 
         The phenopackets are loaded *eagerly* into memory.
+
+        .. note::
+
+          The function is intended for private use only and we encourage
+          using the Phenopacket Store registry API presented in :ref:`load-phenopacket-store` section.
         """
         cohorts = []
         nb_path = pathlib.Path(nb_dir)
@@ -242,9 +303,10 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
                     for filename in os.listdir(cohort_path):
                         if filename.endswith(".json"):
                             filepath = cohort_path.joinpath(filename)
+                            path = re.sub(_FILEFORMAT_SUFFIXES, "", filename)
                             pp = Parse(filepath.read_text(), Phenopacket())
                             pi = EagerPhenopacketInfo(
-                                path=filename,
+                                path=path,
                                 phenopacket=pp,
                             )
                             pp_infos.append(pi)
@@ -257,9 +319,28 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
                         )
                     )
 
-        return DefaultPhenopacketStore(
+        return PhenopacketStore.from_cohorts(
             name=nb_path.name,
             path=nb_path,
+            cohorts=cohorts,
+        )
+
+    @staticmethod
+    def from_cohorts(
+        name: str,
+        path: pathlib.Path,
+        cohorts: typing.Iterable[CohortInfo],
+    ) -> "PhenopacketStore":
+        """
+        Create `PhenopacketStore` from cohorts.
+
+        :param name: a `str` with the store name (e.g. `v0.1.23` or any other `str` will do).
+        :param path: a path to the store root to resolve phenopacket locations.
+        :param cohorts: an iterable with cohorts.
+        """
+        return DefaultPhenopacketStore(
+            name=name,
+            path=path,
             cohorts=cohorts,
         )
 
@@ -331,7 +412,6 @@ class PhenopacketStore(metaclass=abc.ABCMeta):
 
 
 class DefaultPhenopacketStore(PhenopacketStore):
-
     def __init__(
         self,
         name: str,
