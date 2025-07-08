@@ -1,7 +1,6 @@
 import zipfile
 
-from phenosentry.model import CohortInfo
-from ppktstore.model import DefaultPhenopacketStore, PhenopacketStore
+from ppktstore.model import DefaultPhenopacketStore, PhenopacketStore, CohortInfo
 
 class TestPhenopacketStore:
 

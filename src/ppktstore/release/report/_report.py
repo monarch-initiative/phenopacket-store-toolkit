@@ -4,8 +4,7 @@ import typing
 
 from mdutils import MdUtils
 
-from phenosentry.model import CohortInfo
-from ppktstore.model import PhenopacketStore
+from ppktstore.model import PhenopacketStore, CohortInfo
 
 def generate_collections_report(
         notebook_dir: str,

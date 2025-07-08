@@ -80,7 +80,7 @@ def main(argv) -> int:
             logger=logger,
         )
         from ppktstore.release.archive import package_phenopackets
-        from phenosentry.validation import qc_phenopacket_store
+        from ppktstore.validation import qc_phenopacket_store
 
         validated = qc_phenopacket_store(
             store=store,

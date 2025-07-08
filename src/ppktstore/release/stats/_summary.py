@@ -14,8 +14,7 @@ from phenopackets.schema.v2.core.meta_data_pb2 import MetaData
 
 from phenopackets.vrsatile.v1.vrsatile_pb2 import VariationDescriptor
 
-from phenosentry.model import CohortInfo
-from ppktstore.model import PhenopacketStore
+from ppktstore.model import PhenopacketStore, CohortInfo
 
 iso_duration_pt = re.compile(
     r"^P((?P<years>\d+)Y)?((?P<months>\d+)M)?((?P<days>\d+)D)?(T((?P<hours>\d+)H)?((?P<minutes>\d+)M)?((?P<seconds>\d+)S)?)?$"

@@ -7,7 +7,8 @@ import os
 from collections import defaultdict
 from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
 from google.protobuf.json_format import Parse
-from phenosentry.model import EagerPhenopacketInfo, ZipPhenopacketInfo, CohortInfo
+from .phenopacket_info import EagerPhenopacketInfo, ZipPhenopacketInfo
+from .cohort_info import CohortInfo
 
 class PhenopacketStore(metaclass=abc.ABCMeta):
     """
