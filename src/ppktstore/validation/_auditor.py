@@ -5,6 +5,7 @@ from stairval import Auditor
 from stairval.notepad import Notepad
 from phenosentry.validation import get_cohort_auditor
 from phenosentry.model import CohortAuditor
+from phenopackets.schema.v2.phenopackets_pb2 import Cohort
 
 class PhenopacketStoreAuditor(Auditor[PhenopacketStore], metaclass=abc.ABCMeta):
 
@@ -35,7 +36,7 @@ class DefaultPhenopacketStoreAuditor(PhenopacketStoreAuditor):
             for check in self._checks:
                 if isinstance(check, CohortAuditor):
                     check.audit(
-                        item=cohort,
+                        item=Cohort(id=cohort.name, members=cohort.phenopackets),
                         notepad=cohort_pad,
                     )
 
