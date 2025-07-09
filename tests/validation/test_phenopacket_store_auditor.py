@@ -1,9 +1,7 @@
 import logging, pytest
 from pathlib import Path
 
-from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
-
-from ppktstore.model import PhenopacketStore, CohortInfo, PhenopacketInfo, EagerPhenopacketInfo
+from ppktstore.model import PhenopacketStore, CohortInfo, EagerPhenopacketInfo
 from ppktstore.validation import PhenopacketStoreAuditor, default_auditor
 
 
@@ -19,9 +17,13 @@ class TestPhenopacketAuditor:
         phenopacket_store: PhenopacketStore,
         fpath_test_data: str
     ):
+        """
+            Test that a cohort within a phenopacket store throws an error with duplicate phenopacket IDs
+            fails validation.
+        """
         notepad = PhenopacketStoreAuditor.prepare_notepad("test-ps")
         # Create a bad cohort that has 2 phenopackets with the same id
-        pspath = "{0}/{1}".format(fpath_test_data, "test_get_store_zip1")
+        pspath = "{0}/{1}".format(fpath_test_data, "test_get_store_zip1/")
         cohortpath = "{0}{1}".format(pspath, "BADX")
         ps = PhenopacketStore.from_cohorts(
             name = "bad_store",
@@ -44,22 +46,7 @@ class TestPhenopacketAuditor:
         )
         assert not notepad.has_errors_or_warnings(include_subsections=False)
         assert notepad.has_errors_or_warnings(include_subsections=True)
-
-
-    # def test_phenopacket_store_phenopacket_fail(
-    #     self,
-    #     strict_auditor: PhenopacketAuditor,
-    #     auditor: PhenopacketAuditor,
-    #     phenopacket_strict_fail: Phenopacket,
-    # ):
-    #     notepad = PhenopacketAuditor.prepare_notepad("test-ps")
-    #     auditor.audit(
-    #         item=phenopacket_strict_fail,
-    #         notepad=notepad,
-    #     )
-    #     assert not notepad.has_errors_or_warnings(include_subsections=True)
-    #     strict_auditor.audit(
-    #         item=phenopacket_strict_fail,
-    #         notepad=notepad,
-    #     )
-    #     assert notepad.has_errors_or_warnings(include_subsections=True)
+        for section in notepad.iter_sections():
+            if section.has_errors_or_warnings(include_subsections=False):
+                   assert (list(section.errors())[0].message ==
+                           "`PMID_28239884_Family_1_proband` is not unique in cohort `BADX`")
