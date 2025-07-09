@@ -1,10 +1,11 @@
 import argparse
 import logging
+import pathlib
+import os
 import sys
 
 import ppktstore
-import ppktstore.release
-from .model import PhenopacketStore
+
 
 def main(argv) -> int:
     """
@@ -48,9 +49,15 @@ def main(argv) -> int:
         help="where to write the release archive",
     )
 
+    # #################### ------------- `qc` ------------------ ####################
+    parser_check = subparsers.add_parser("qc", help="Q/C phenopackets")
+    parser_check.add_argument(
+        "--notebook-dir", default="notebooks", help="path to cohorts directory"
+    )
+
     # #################### ------------- `report` -------------- ####################
     report = subparsers.add_parser("report", help="Generate reports")
-    subparsers_report = report.add_subparsers(dest="report_command")
+    subparsers_report = report.add_subparsers(dest="subcommand")
 
     parser_collections = subparsers_report.add_parser(
         "collections", help="Generate collections report"
@@ -67,6 +74,45 @@ def main(argv) -> int:
         "--output", help="where to generate the collections report"
     )
 
+    # #################### ------------- `export` -------------- ####################
+
+    parser_export = subparsers.add_parser(
+        "export", help="Export a phenopackets, cohorts, or families"
+    )
+    subparsers_export = parser_export.add_subparsers(dest="subcommand")
+
+    # #################### ------------- `export | phenopackets` ####################
+    parser_export_phenopackets = subparsers_export.add_parser(
+        "phenopackets",
+        help="export phenopackets from phenopacket store",
+    )
+    parser_export_phenopackets.add_argument(
+        "-r",
+        "--release",
+        default=None,
+        help="phenopacket store release tag (default: latest)",
+    )
+    parser_export_phenopackets.add_argument(
+        "-f",
+        "--format",
+        type=str,
+        default="json",
+        choices=("json", "pb"),
+        help="phenopacket file format (default: json)",
+    )
+    parser_export_phenopackets.add_argument(
+        "-o",
+        "--outdir",
+        type=pathlib.Path,
+        default=pathlib.Path(os.getcwd()),
+        help="path to directory where to export",
+    )
+    parser_export_phenopackets.add_argument(
+        "cohort",
+        type=str,
+        help="name of the cohort to export",
+    )
+
     if len(argv) == 0:
         parser.print_help()
         return 1
@@ -80,16 +126,6 @@ def main(argv) -> int:
             logger=logger,
         )
         from ppktstore.release.archive import package_phenopackets
-        from ppktstore.validation import qc_phenopacket_store
-
-        validated = qc_phenopacket_store(
-            store=store,
-            logger=logger,
-        )
-
-        if validated:
-            logger.error("Phenopackets validation failed. Cannot package.")
-            return 1
 
         return package_phenopackets(
             store=store,
@@ -98,8 +134,19 @@ def main(argv) -> int:
             release_tag=args.release_tag,
             logger=logger,
         )
+    elif args.command == "qc":
+        store = read_phenopacket_store(
+            notebook_dir=args.notebook_dir,
+            logger=logger,
+        )
+        from ppktstore.release.qc import qc_phenopackets
+
+        return qc_phenopackets(
+            store=store,
+            logger=logger,
+        )
     elif args.command == "report":
-        if args.report_command == "collections":
+        if args.subcommand == "collections":
             from ppktstore.release.report import generate_collections_report
 
             return generate_collections_report(
@@ -111,6 +158,33 @@ def main(argv) -> int:
         else:
             report.print_help()
             return 1
+    elif args.command == "export":
+        if args.subcommand == "phenopackets":
+            from ppktstore.registry import configure_phenopacket_registry
+
+            if args.format not in ("json", "pb"):
+                logger.error(
+                    "format must be one of ('json', 'pb') but was %s", args.format
+                )
+                return 1
+
+            release = getattr(args, "release") if hasattr(args, "release") else None
+            registry = configure_phenopacket_registry()
+
+            with registry.open_phenopacket_store(release=release) as ps:
+                try:
+                    ps.cohort_for_name(args.cohort).export_phenopackets_to_directory(
+                        path=args.outdir,
+                        format=args.format,
+                    )
+                except KeyError:
+                    logger.error(
+                        "Cohort %s was not found in phenopacket store", args.cohort
+                    )
+            return 0
+        else:
+            parser.print_help()
+            return 1
     else:
         parser.print_help()
         return 1
@@ -119,9 +193,9 @@ def main(argv) -> int:
 def read_phenopacket_store(
     notebook_dir: str,
     logger: logging.Logger,
-) -> PhenopacketStore:
+) -> ppktstore.model.PhenopacketStore:
     logger.info("Reading phenopackets at `%s`", notebook_dir)
-    phenopacket_store = PhenopacketStore.from_notebook_dir(notebook_dir)
+    phenopacket_store = ppktstore.model.PhenopacketStore.from_notebook_dir(notebook_dir)
     logger.info(
         "Read %d cohorts with %d phenopackets",
         phenopacket_store.cohort_count(),

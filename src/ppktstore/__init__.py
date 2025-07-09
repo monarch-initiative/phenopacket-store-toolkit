@@ -7,7 +7,7 @@ from . import model
 from . import validation
 # We do not import `.release` package since it requires extra dependencies.
 
-__version__ = "0.1.5.dev0"
+__version__ = "0.1.6.dev0"
 
 __all__ = [
     "registry",
