@@ -3,6 +3,7 @@ from ..model import PhenopacketStore
 from stairval.notepad import Notepad
 from collections import Counter, defaultdict
 
+
 class UniquePhenopacketId(PhenopacketStoreAuditor):
     """
     Check that phenopacket id is unique within the entire phenopacket store.

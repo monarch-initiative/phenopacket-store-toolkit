@@ -1,6 +1,7 @@
 import os
 import pytest
 
+
 @pytest.fixture(scope="session")
 def fpath_test_data() -> str:
     fpath_test_dir = os.path.join(os.getcwd(), "tests")

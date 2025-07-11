@@ -8,6 +8,17 @@ from ppktstore.model import PhenopacketStore, CohortInfo
 
 
 class TestCohortInfo:
+    
+    @pytest.fixture(scope="class")
+    def phenopacket_store(
+        self,
+        fpath_ps_release_zip: str,
+    ):
+        with zipfile.ZipFile(fpath_ps_release_zip) as zip_file:
+            yield PhenopacketStore.from_release_zip(
+                zip_file=zip_file,
+            )
+
     @pytest.fixture(scope="class")
     def cohort_info(
         self,
