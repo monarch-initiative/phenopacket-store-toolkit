@@ -44,7 +44,8 @@ release = [
     "numpy>=1.24.2, <2.0.0",     # 1.24.2 was released on Feb 5, 2023    
     "pandas>=2.0.0, <3.0.0",     # 2.0.0 was released on Apr 3, 2023
     "seaborn>=0.12.2, <1.0.0",   # 0.12.2 was released on Dec 30, 2022
-    "phenosentry>=0.1.7"
+    "phenosentry>=0.1.7",
+    "click>=8.2.1"
 ]
 
 # Dependencies needed for running the test suite.
