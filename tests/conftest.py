@@ -1,10 +1,5 @@
 import os
-import zipfile
-
 import pytest
-
-from ppktstore.model import PhenopacketStore
-
 
 @pytest.fixture(scope="session")
 def fpath_test_data() -> str:

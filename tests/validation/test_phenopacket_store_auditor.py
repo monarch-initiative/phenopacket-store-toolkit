@@ -2,7 +2,8 @@ import pytest
 
 from ppktstore.model import PhenopacketStore
 from ppktstore.validation import PhenopacketStoreAuditor, default_auditor
-
+import zipfile
+import os
 
 class TestPhenopacketAuditor:
 
