@@ -139,9 +139,9 @@ def main(argv) -> int:
             notebook_dir=args.notebook_dir,
             logger=logger,
         )
-        from ppktstore.release.qc import qc_phenopackets
+        from ppktstore.validation import qc_phenopacket_store
 
-        return qc_phenopackets(
+        return qc_phenopacket_store(
             store=store,
             logger=logger,
         )
