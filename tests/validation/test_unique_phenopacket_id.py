@@ -52,7 +52,7 @@ class TestUniquePhenopacketId:
         errors = tuple(notepad.errors())
         assert len(errors) == 1
         error = errors[0]
-        assert error.message == "`A` is present in 2 cohorts: {'cohort1', 'cohort2'}"
+        assert error.message == "`A` is present in 2 cohorts: ['cohort1', 'cohort2']"
         assert error.solution is None
 
     def test_unique_phenopacket_id_pass(
