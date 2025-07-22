@@ -5,7 +5,7 @@ import io
 import typing
 from stairval.notepad import Notepad
 from phenosentry.validation import get_cohort_auditor
-from phenosentry.model import CohortAuditor, PhenopacketAuditor
+from phenosentry.validation import CohortAuditor, PhenopacketAuditor
 from phenopackets.schema.v2.phenopackets_pb2 import Cohort
 from ._checks import UniquePhenopacketId
 
