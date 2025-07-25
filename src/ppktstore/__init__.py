@@ -4,7 +4,7 @@ and simplifies access to the store data for the downstream applications.
 """
 from . import registry
 from . import model
-from . import validation
+from .validation import qc_phenopacket_store
 # We do not import `.release` package since it requires extra dependencies.
 
 __version__ = "0.1.6.dev0"
@@ -12,5 +12,5 @@ __version__ = "0.1.6.dev0"
 __all__ = [
     "registry",
     "model",
-    "validation"
+    "qc_phenopacket_store",
 ]

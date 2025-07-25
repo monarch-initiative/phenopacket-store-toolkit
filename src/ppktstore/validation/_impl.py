@@ -5,7 +5,7 @@ import io
 import typing
 from stairval.notepad import Notepad
 from phenosentry.validation import get_cohort_auditor
-from phenosentry.validation import CohortAuditor, PhenopacketAuditor
+from phenosentry.validation import CohortAuditor
 from phenopackets.schema.v2.phenopackets_pb2 import Cohort
 from ._checks import UniquePhenopacketId
 
@@ -13,7 +13,7 @@ class DefaultPhenopacketStoreAuditor(PhenopacketStoreAuditor):
 
     def __init__(
         self,
-        checks: typing.Iterable[PhenopacketStoreAuditor | CohortAuditor | PhenopacketAuditor],
+        checks: typing.Iterable[PhenopacketStoreAuditor | CohortAuditor],
     ):
         self._checks = tuple(checks)
         self._id = '[' + ', '.join(check.id() for check in self._checks) + ']'
