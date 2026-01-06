@@ -59,7 +59,7 @@ by adding `release` profile:
 python3 -m pip install phenopacket-store-toolkit[release]
 ```
 
-we can Q/C the phenopackets by running:
+Now, we can Q/C the phenopackets in the `notebooks` directory by running:
 
 ```shell
 python3 -m ppktstore qc --notebook-dir notebooks
