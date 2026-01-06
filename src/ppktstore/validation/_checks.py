@@ -1,7 +1,9 @@
-from ._api import PhenopacketStoreAuditor
-from ..model import PhenopacketStore
-from stairval.notepad import Notepad
 from collections import Counter, defaultdict
+
+from stairval.notepad import Notepad
+
+from ..model import PhenopacketStore
+from ._api import PhenopacketStoreAuditor
 
 
 class UniquePhenopacketId(PhenopacketStoreAuditor):
@@ -12,11 +14,7 @@ class UniquePhenopacketId(PhenopacketStoreAuditor):
     def id(self) -> str:
         return "unique_ps_id_check"
 
-    def audit(
-        self,
-        item: PhenopacketStore,
-        notepad: Notepad
-    ):
+    def audit(self, item: PhenopacketStore, notepad: Notepad):
         id_counter = Counter()
         pp_id2cohort = defaultdict(set)
         if len(item.cohorts()) > 1:

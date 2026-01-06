@@ -36,7 +36,7 @@ def summarize_diseases_and_genotype(
     Create a summary table for all phenopackets of the store
     """
     data = defaultdict(list)
-    for cohort in (cohorts.cohorts() if isinstance(cohorts, PhenopacketStore) else cohorts):
+    for cohort in cohorts.cohorts() if isinstance(cohorts, PhenopacketStore) else cohorts:
         for pp_info in cohort.phenopackets:
             pp = pp_info.phenopacket
             for interpretation in pp.interpretations:
@@ -52,9 +52,7 @@ def summarize_diseases_and_genotype(
                     elif len(alleles) == 1:
                         allele1, allele2 = alleles[0], ""
                     else:
-                        raise ValueError(
-                            f"Length of alleles {len(alleles)} was not `1` or `2` for {pp_path}"
-                        )
+                        raise ValueError(f"Length of alleles {len(alleles)} was not `1` or `2` for {pp_path}")
 
                     data["disease"].append(dx.disease.label)
                     data["disease_id"].append(dx.disease.id)
@@ -216,9 +214,7 @@ def _get_gene_and_alleles(
     for genomic_interpretation in diagnosis.genomic_interpretations:
         if genomic_interpretation.variant_interpretation:
             if genomic_interpretation.variant_interpretation.variation_descriptor:
-                var_desc = (
-                    genomic_interpretation.variant_interpretation.variation_descriptor
-                )
+                var_desc = genomic_interpretation.variant_interpretation.variation_descriptor
                 gene = _get_gene_symbol(variant_descriptor=var_desc)
                 if var_desc.expressions:
                     hgvsC = ""

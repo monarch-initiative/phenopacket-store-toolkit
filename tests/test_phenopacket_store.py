@@ -8,7 +8,6 @@ from ppktstore.model import PhenopacketStore, CohortInfo
 
 
 class TestCohortInfo:
-    
     @pytest.fixture(scope="class")
     def phenopacket_store(
         self,

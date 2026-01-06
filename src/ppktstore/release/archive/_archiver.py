@@ -46,9 +46,7 @@ class PhenopacketStoreArchiver:
     @staticmethod
     def _get_cohort_name(lpath_components: typing.Sequence[str]):
         if len(lpath_components) < 3:
-            raise ValueError(
-                f"Unexpected path with {len(lpath_components)} components: {lpath_components}"
-            )
+            raise ValueError(f"Unexpected path with {len(lpath_components)} components: {lpath_components}")
         return lpath_components[-2]
 
     def prepare_archive(
@@ -106,9 +104,7 @@ class PhenopacketStoreArchiver:
         self._check_no_suffix_in_filename(filename)
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            self._pack_content_into_temp_directory(
-                store, tmpdirname, flat, top_level_folder
-            )
+            self._pack_content_into_temp_directory(store, tmpdirname, flat, top_level_folder)
 
             with tarfile.open(f"{filename}.tgz", "w:gz") as tar:
                 tar.add(tmpdirname, arcname="")
@@ -133,9 +129,7 @@ class PhenopacketStoreArchiver:
         self._check_no_suffix_in_filename(filename)
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            self._pack_content_into_temp_directory(
-                store, tmpdirname, flat, top_level_folder
-            )
+            self._pack_content_into_temp_directory(store, tmpdirname, flat, top_level_folder)
 
             shutil.make_archive(filename, "zip", tmpdirname)
 
@@ -145,10 +139,8 @@ class PhenopacketStoreArchiver:
     ):
         matcher = self._suffix_pt.search(outfilename)
         if matcher:
-            suffix = outfilename[matcher.start("suffix"): matcher.end("suffix")]
-            raise ValueError(
-                f"The path must not include suffix but found {suffix} in {outfilename}"
-            )
+            suffix = outfilename[matcher.start("suffix") : matcher.end("suffix")]
+            raise ValueError(f"The path must not include suffix but found {suffix} in {outfilename}")
 
     def _pack_content_into_temp_directory(
         self,

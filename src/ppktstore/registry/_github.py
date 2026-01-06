@@ -21,9 +21,7 @@ class GitHubPhenopacketStoreReleaseService(PhenopacketStoreReleaseService):
     ):
         self._logger = logging.getLogger(__name__)
         self._timeout = timeout
-        self._tag_api_url = (
-            "https://api.github.com/repos/monarch-initiative/phenopacket-store/tags"
-        )
+        self._tag_api_url = "https://api.github.com/repos/monarch-initiative/phenopacket-store/tags"
         self._ctx = ssl.create_default_context(cafile=certifi.where())
 
     def fetch_tags(self) -> typing.Iterable[str]:
@@ -63,8 +61,9 @@ class GitHubRemotePhenopacketStoreService(RemotePhenopacketStoreService):
         self._logger = logging.getLogger(__name__)
         self._timeout = timeout
         self._ctx = ssl.create_default_context(cafile=certifi.where())
-        self._release_url = \
+        self._release_url = (
             "https://github.com/monarch-initiative/phenopacket-store/releases/download/{release}/all_phenopackets.zip"
+        )
 
     def fetch_resource(
         self,

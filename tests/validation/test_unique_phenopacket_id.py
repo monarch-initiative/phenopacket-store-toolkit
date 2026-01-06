@@ -20,9 +20,7 @@ def make_cohort(
     name: str,
     ids: typing.Iterable[str],
 ) -> CohortInfo:
-    infos = [
-        EagerPhenopacketInfo.from_phenopacket(str(i), make_phenopacket(i)) for i in ids
-    ]
+    infos = [EagerPhenopacketInfo.from_phenopacket(str(i), make_phenopacket(i)) for i in ids]
     return CohortInfo(name, name, infos)
 
 

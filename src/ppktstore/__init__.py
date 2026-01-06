@@ -2,6 +2,7 @@
 Phenopacket Store Toolkit helps with Phenopacket Store release and Q/C
 and simplifies access to the store data for the downstream applications.
 """
+
 from . import registry
 from . import model
 from .validation import qc_phenopacket_store

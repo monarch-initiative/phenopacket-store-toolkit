@@ -29,13 +29,20 @@ def main(argv) -> int:
 
     # #################### ------------- `package` ------------- ####################
     parser_package = subparsers.add_parser(
-        "package", help="Gather all phenopackets into a release archive"
+        "package",
+        help="Gather all phenopackets into a release archive",
     )
     parser_package.add_argument(
-        "--notebook-dir", default="notebooks", help="path to cohorts directory"
+        "--notebook-dir",
+        default="notebooks",
+        help="path to cohorts directory",
     )
     parser_package.add_argument(
-        "--format", nargs="*", type=str, default=("zip",), choices=("zip", "tgz")
+        "--format",
+        nargs="*",
+        type=str,
+        default=("zip",),
+        choices=("zip", "tgz"),
     )
     parser_package.add_argument(
         "--release-tag",
@@ -52,7 +59,9 @@ def main(argv) -> int:
     # #################### ------------- `qc` ------------------ ####################
     parser_check = subparsers.add_parser("qc", help="Q/C phenopackets")
     parser_check.add_argument(
-        "--notebook-dir", default="notebooks", help="path to cohorts directory"
+        "--notebook-dir",
+        default="notebooks",
+        help="path to cohorts directory",
     )
 
     # #################### ------------- `report` -------------- ####################
@@ -60,10 +69,13 @@ def main(argv) -> int:
     subparsers_report = report.add_subparsers(dest="subcommand")
 
     parser_collections = subparsers_report.add_parser(
-        "collections", help="Generate collections report"
+        "collections",
+        help="Generate collections report",
     )
     parser_collections.add_argument(
-        "--notebook-dir", default="notebooks", help="path to cohorts directory"
+        "--notebook-dir",
+        default="notebooks",
+        help="path to cohorts directory",
     )
     parser_collections.add_argument(
         "--notebook-dir-url",
@@ -71,13 +83,15 @@ def main(argv) -> int:
         help="URL pointing to notebooks folder on GitHub",
     )
     parser_collections.add_argument(
-        "--output", help="where to generate the collections report"
+        "--output",
+        help="where to generate the collections report",
     )
 
     # #################### ------------- `export` -------------- ####################
 
     parser_export = subparsers.add_parser(
-        "export", help="Export a phenopackets, cohorts, or families"
+        "export",
+        help="Export a phenopackets, cohorts, or families",
     )
     subparsers_export = parser_export.add_subparsers(dest="subcommand")
 
@@ -164,7 +178,8 @@ def main(argv) -> int:
 
             if args.format not in ("json", "pb"):
                 logger.error(
-                    "format must be one of ('json', 'pb') but was %s", args.format
+                    "format must be one of ('json', 'pb') but was %s",
+                    args.format,
                 )
                 return 1
 
@@ -179,7 +194,8 @@ def main(argv) -> int:
                     )
                 except KeyError:
                     logger.error(
-                        "Cohort %s was not found in phenopacket store", args.cohort
+                        "Cohort %s was not found in phenopacket store",
+                        args.cohort,
                     )
             return 0
         else:
@@ -213,7 +229,7 @@ def setup_logging():
     ch.setLevel(level)
     # create formatter
     formatter = logging.Formatter(
-        "%(asctime)s %(name)-20s %(levelname)-3s : %(message)s"
+        "%(asctime)s %(name)-20s %(levelname)-3s : %(message)s",
     )
     # add formatter to ch
     ch.setFormatter(formatter)

@@ -15,6 +15,7 @@ from ._zip_util import relative_to
 
 _FILEFORMAT_SUFFIXES = re.compile(r"\.(json|pb)$")
 
+
 class PhenopacketInfo(metaclass=abc.ABCMeta):
     """
     Phenopacket info includes a phenopacket plus metadata,
@@ -142,13 +143,14 @@ class CohortInfo:
         """
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
-        
+
         if not os.path.isdir(path):
             raise ValueError(f"output {path} does is not a directory")
-        
+
         match format:
             case "json":
                 from google.protobuf.json_format import MessageToJson
+
                 for pi in self.phenopackets:
                     fpath_out = os.path.join(path, f"{pi.path}.json")
                     with open(fpath_out, "w") as fh:

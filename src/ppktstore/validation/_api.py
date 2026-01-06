@@ -1,9 +1,11 @@
 import abc
-from ..model import PhenopacketStore
+
 from stairval import Auditor
 
-class PhenopacketStoreAuditor(Auditor[PhenopacketStore], metaclass=abc.ABCMeta):
+from ..model import PhenopacketStore
 
+
+class PhenopacketStoreAuditor(Auditor[PhenopacketStore], metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def id(self) -> str:
         """
