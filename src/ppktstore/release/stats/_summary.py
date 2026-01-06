@@ -258,7 +258,7 @@ def _get_structural_var(
         stype = variation_descriptor.structural_type
         alleles.append(stype.label)
     else:
-        raise ValueError(f"Could not find structural_type field")
+        raise ValueError("Could not find structural_type field")
     return alleles
 
 

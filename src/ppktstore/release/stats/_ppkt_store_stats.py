@@ -80,10 +80,10 @@ class PPKtStoreStats:
         # stats_d["individuals per disease (n>=50)"] = len([x for x in individuals_per_disease if x >= 50])
         # stats_d["individuals per disease (n>=100)"] = len([x for x in individuals_per_disease if x >= 100])
         # Some genes are associated with multiple diseases
-        gene_by_disease_df = df[["gene", "disease_id"]].drop_duplicates()
-        gbd_counts_df = (
-            gene_by_disease_df.groupby("disease_id").count().value_counts(ascending=False).reset_index(name="count")
-        )
+        # gene_by_disease_df = df[["gene", "disease_id"]].drop_duplicates()
+        # gbd_counts_df = (
+        #     gene_by_disease_df.groupby("disease_id").count().value_counts(ascending=False).reset_index(name="count")
+        # )
         stats_d["genes associated with a single disease"] = len(
             [x for x in genes_to_disease_d.keys() if len(genes_to_disease_d[x]) == 1]
         )
@@ -300,12 +300,10 @@ class PPKtStoreStats:
                                     var_list.append(e.value)
                                     stillLookingForVar = False
                             if stillLookingForVar:
-                                try:
-                                    if len(vdesc.label) > 0:
-                                        var_list.append(vdesc.label)
-                                        stillLookingForVar = False
-                                except:
-                                    pass
+                                if len(vdesc.label) > 0:
+                                    var_list.append(vdesc.label)
+                                    stillLookingForVar = False
+                                
                     if stillLookingForVar:
                         print(f"[WARNING] could not find variant for phenopacket {ppkt.id}")
         return var_list
