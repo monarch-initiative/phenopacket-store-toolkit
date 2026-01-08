@@ -25,3 +25,9 @@ jobs:
         - name: Run tests
           run: |
             pytest
+        - name: Lint code
+          run: |
+            ruff check --silent
+        - name: Check code formatting
+          run: |
+            ruff format --check

@@ -1,17 +1,19 @@
 import io
 import logging
 
-from ._config import configure_qc_checker
+import hpotk
 
-from ppktstore.model import PhenopacketStore
+from ..model import PhenopacketStore
+from ._ps_auditor import PhenopacketStoreAuditor
 
 
-def qc_phenopackets(
+def qc_phenopacket_store(
     store: PhenopacketStore,
+    hpo: hpotk.MinimalOntology,
     logger: logging.Logger,
 ) -> int:
-    logger.info('Checking phenopackets')
-    auditor = configure_qc_checker()
+    logger.info("Checking phenopacket store")
+    auditor = PhenopacketStoreAuditor.default_auditor(hpo)
     notepad = auditor.prepare_notepad(store.name)
     auditor.audit(
         item=store,

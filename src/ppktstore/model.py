@@ -9,11 +9,12 @@ import zipfile
 from collections import defaultdict
 
 from google.protobuf.json_format import Parse
-from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
+from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket, Cohort
 
 from ._zip_util import relative_to
 
 _FILEFORMAT_SUFFIXES = re.compile(r"\.(json|pb)$")
+
 
 class PhenopacketInfo(metaclass=abc.ABCMeta):
     """
@@ -114,9 +115,9 @@ class CohortInfo:
     Path of the cohort relative from the enclosing source.
     """
 
-    phenopackets: typing.Collection[PhenopacketInfo]
+    phenopackets: typing.Sequence[PhenopacketInfo]
     """
-    The cohort phenopacket infos.
+    A sequence of cohort's phenopacket infos.
     """
 
     def iter_phenopackets(self) -> typing.Iterator[Phenopacket]:
@@ -124,6 +125,21 @@ class CohortInfo:
         Get an iterator with all phenopackets belonging to the cohort.
         """
         return map(lambda pi: pi.phenopacket, self.phenopackets)
+
+    @property
+    def cohort(self) -> Cohort:
+        """
+        Create a Phenopacket Schema :class:`Cohort` from the cohort info.
+
+        The :meth:`CohortInfo.name` is used as `cohort.id`
+        and the phenopackets are added into `cohort.members`.
+
+        No cohort-level meta data is created.
+        """
+        return Cohort(
+            id=self.name,
+            members=(pi.phenopacket for pi in self.phenopackets),
+        )
 
     def export_phenopackets_to_directory(
         self,
@@ -142,13 +158,14 @@ class CohortInfo:
         """
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
-        
+
         if not os.path.isdir(path):
             raise ValueError(f"output {path} does is not a directory")
-        
+
         match format:
             case "json":
                 from google.protobuf.json_format import MessageToJson
+
                 for pi in self.phenopackets:
                     fpath_out = os.path.join(path, f"{pi.path}.json")
                     with open(fpath_out, "w") as fh:

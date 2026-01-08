@@ -8,23 +8,23 @@ from ppktstore.model import PhenopacketStore, CohortInfo
 
 
 def generate_collections_report(
-        notebook_dir: str,
-        notebook_dir_url: str,
-        output: str,
-        logger: logging.Logger,
+    notebook_dir: str,
+    notebook_dir_url: str,
+    output: str,
+    logger: logging.Logger,
 ) -> int:
-    logger.info('Generating report for phenopackets at %s', notebook_dir)
-    logger.info('Using notebook URL `%s`', notebook_dir_url)
+    logger.info("Generating report for phenopackets at %s", notebook_dir)
+    logger.info("Using notebook URL `%s`", notebook_dir_url)
     report = generate_phenopacket_store_report(
         notebook_dir=notebook_dir,
         notebook_dir_url=notebook_dir_url,
     )
 
-    logger.info('Writing report to %s', output)
-    with open(output, 'w') as fh:
+    logger.info("Writing report to %s", output)
+    with open(output, "w") as fh:
         fh.write(report)
 
-    logger.info('Done!')
+    logger.info("Done!")
     return 0
 
 
@@ -65,19 +65,16 @@ def generate_phenopacket_store_report(
         notebook_link = _prepare_cohort_link(notebook_dir_url, notebook_dir, cohort.name)
         cohort_text = "[" + cohort.name + "](" + notebook_link + '){:target="_blank"}'
         table_data.append(cohort_text)
-        
-        
+
         # Show details on diseases in a cohort except for very large cohorts (up to 20 distinct diseases)
         phenopacket_count_text = "1 Phenopacket" if cohort_count == 1 else f"{cohort_count} Phenopackets"
         if len(dx_data) < 21:
             disease_texts = []
             for dx_id, dx_label in dx_data.items():
                 dx_link = _prepare_dx_link(dx_id)
-                disease_texts.append(
-                    f'[{dx_label}]({dx_link}){{:target=_blank}}'
-                )
-            diseases_text = ', '.join(disease_texts)
-            comments_text = f'{phenopacket_count_text}: {diseases_text}'
+                disease_texts.append(f"[{dx_label}]({dx_link}){{:target=_blank}}")
+            diseases_text = ", ".join(disease_texts)
+            comments_text = f"{phenopacket_count_text}: {diseases_text}"
         table_data.append(comments_text)
 
         row_count += 1
@@ -120,17 +117,13 @@ def _prepare_dx_link(
 
 
 def _prepare_cohort_link(
-    notebook_dir_url: str, 
+    notebook_dir_url: str,
     notebook_dir: str,
     cohort_name: str,
 ) -> str:
     cohort_dir = os.path.join(notebook_dir, cohort_name)
     cohort_url = os.path.join(notebook_dir_url, cohort_name)
-    notebook_links = [
-        os.path.join(cohort_url, fname)
-        for fname in os.listdir(cohort_dir)
-        if fname.endswith(".ipynb")
-    ]
+    notebook_links = [os.path.join(cohort_url, fname) for fname in os.listdir(cohort_dir) if fname.endswith(".ipynb")]
 
     if len(notebook_dir) == 0:
         return cohort_url
