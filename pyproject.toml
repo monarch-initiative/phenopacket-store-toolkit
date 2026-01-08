@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phenopacket-store-toolkit"
-# version in __init__
+version = "0.1.6.dev0"
 requires-python = ">=3.10"
 description = "Collection of GA4GH Phenopackets"
 readme = "README.md"
@@ -33,7 +33,6 @@ dependencies = [
     "phenopackets>=2.0.2.post4",
     "certifi",                   # The latest version is the best.
 ]
-dynamic = ["version"]
 
 [project.optional-dependencies]
 # Dependencies needed for release, Q/C, and running the Jupyter notebooks within the repo.
@@ -62,6 +61,3 @@ bugtracker = "https://github.com/monarch-initiative/phenopacket-store-toolkit/is
 
 [tool.setuptools]
 package-dir = { "" = "src" }
-
-[tool.setuptools.dynamic]
-version = { attr = "ppktstore.__version__" }
