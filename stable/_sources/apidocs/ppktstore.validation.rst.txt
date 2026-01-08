@@ -1,7 +1,7 @@
-ppktstore.release.qc package
+ppktstore.validation package
 ============================
 
-.. automodule:: ppktstore.release.qc
+.. automodule:: ppktstore.validation
    :members:
    :show-inheritance:
    :undoc-members:

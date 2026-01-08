@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ppktstore.model &mdash; phenopacket-store-toolkit 0.1.5 documentation</title>
+  <title>ppktstore.model &mdash; phenopacket-store-toolkit 0.1.6.dev0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../../_static/documentation_options.js?v=6332dbee"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -86,11 +86,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.json_format</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parse</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">phenopackets.schema.v2.phenopackets_pb2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Phenopacket</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">phenopackets.schema.v2.phenopackets_pb2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Phenopacket</span><span class="p">,</span> <span class="n">Cohort</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._zip_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">relative_to</span>
 
 <span class="n">_FILEFORMAT_SUFFIXES</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.(json|pb)$&quot;</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="PhenopacketInfo">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.PhenopacketInfo">[docs]</a>
@@ -205,9 +206,9 @@
 <span class="sd">    Path of the cohort relative from the enclosing source.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">phenopackets</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Collection</span><span class="p">[</span><span class="n">PhenopacketInfo</span><span class="p">]</span>
+    <span class="n">phenopackets</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">PhenopacketInfo</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The cohort phenopacket infos.</span>
+<span class="sd">    A sequence of cohort&#39;s phenopacket infos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CohortInfo.iter_phenopackets">
@@ -218,6 +219,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">pi</span><span class="p">:</span> <span class="n">pi</span><span class="o">.</span><span class="n">phenopacket</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">)</span></div>
 
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cohort</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cohort</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Phenopacket Schema :class:`Cohort` from the cohort info.</span>
+
+<span class="sd">        The :meth:`CohortInfo.name` is used as `cohort.id`</span>
+<span class="sd">        and the phenopackets are added into `cohort.members`.</span>
+
+<span class="sd">        No cohort-level meta data is created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Cohort</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">members</span><span class="o">=</span><span class="p">(</span><span class="n">pi</span><span class="o">.</span><span class="n">phenopacket</span> <span class="k">for</span> <span class="n">pi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">),</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="CohortInfo.export_phenopackets_to_directory">
 <a class="viewcode-back" href="../../apidocs/ppktstore.model.html#ppktstore.model.CohortInfo.export_phenopackets_to_directory">[docs]</a>
@@ -238,13 +254,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> does is not a directory&quot;</span><span class="p">)</span>
-        
+
         <span class="k">match</span> <span class="nb">format</span><span class="p">:</span>
             <span class="k">case</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.json_format</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageToJson</span>
+
                 <span class="k">for</span> <span class="n">pi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenopackets</span><span class="p">:</span>
                     <span class="n">fpath_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pi</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath_out</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>

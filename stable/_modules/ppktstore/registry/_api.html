@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ppktstore.registry._api &mdash; phenopacket-store-toolkit 0.1.5 documentation</title>
+  <title>ppktstore.registry._api &mdash; phenopacket-store-toolkit 0.1.6.dev0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../../../_static/documentation_options.js?v=6332dbee"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -88,9 +88,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">ppktstore.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhenopacketStore</span>
 
 
-<span class="n">SEMVER_VERSION_PT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-    <span class="sa">r</span><span class="s2">&quot;v?(?P&lt;major&gt;\d+)(\.(?P&lt;minor&gt;\d+))?(\.(?P&lt;patch&gt;\d+))?&quot;</span>
-<span class="p">)</span>
+<span class="n">SEMVER_VERSION_PT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;v?(?P&lt;major&gt;\d+)(\.(?P&lt;minor&gt;\d+))?(\.(?P&lt;patch&gt;\d+))?&quot;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Pattern for matching basic semantic versioning tags such as `v0.1.2`, `1.2.3`, `1`, or `1.2`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -202,9 +200,7 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">release_service</span><span class="p">,</span> <span class="n">PhenopacketStoreReleaseService</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_release_service</span> <span class="o">=</span> <span class="n">release_service</span>
 
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">remote_phenopacket_store_service</span><span class="p">,</span> <span class="n">RemotePhenopacketStoreService</span>
-        <span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">remote_phenopacket_store_service</span><span class="p">,</span> <span class="n">RemotePhenopacketStoreService</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_remote_ps_service</span> <span class="o">=</span> <span class="n">remote_phenopacket_store_service</span>
 
 <div class="viewcode-block" id="PhenopacketStoreRegistry.open_phenopacket_store">
@@ -317,22 +313,14 @@
             <span class="n">matcher</span> <span class="o">=</span> <span class="n">SEMVER_VERSION_PT</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">matcher</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">major</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;major&quot;</span><span class="p">)</span>
-                <span class="n">minor</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;minor&quot;</span><span class="p">))</span>
-                    <span class="k">if</span> <span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;minor&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                    <span class="k">else</span> <span class="mi">0</span>
-                <span class="p">)</span>
-                <span class="n">patch</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;patch&quot;</span><span class="p">))</span>
-                    <span class="k">if</span> <span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;patch&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                    <span class="k">else</span> <span class="mi">0</span>
-                <span class="p">)</span>
+                <span class="n">minor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;minor&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;minor&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">patch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;patch&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">matcher</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;patch&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
                 <span class="n">current</span> <span class="o">=</span> <span class="p">(</span><span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">patch</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">latest_components</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">current</span> <span class="o">&gt;</span> <span class="n">latest_components</span><span class="p">:</span>
                     <span class="n">latest_components</span> <span class="o">=</span> <span class="n">current</span>
                     <span class="n">latest_tag_idx</span> <span class="o">=</span> <span class="n">i</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Skipping the release tag </span><span class="si">%s</span><span class="s1"> that does not match semantic versioning&#39;</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Skipping the release tag </span><span class="si">%s</span><span class="s2"> that does not match semantic versioning&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">latest_tag_idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve the latest tag&quot;</span><span class="p">)</span>

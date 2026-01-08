@@ -14,6 +14,7 @@ Subpackages
 
    ppktstore.registry
    ppktstore.release
+   ppktstore.validation
 
 Submodules
 ----------

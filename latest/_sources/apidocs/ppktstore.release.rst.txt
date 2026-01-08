@@ -13,6 +13,5 @@ Subpackages
    :maxdepth: 2
 
    ppktstore.release.archive
-   ppktstore.release.qc
    ppktstore.release.report
    ppktstore.release.stats
