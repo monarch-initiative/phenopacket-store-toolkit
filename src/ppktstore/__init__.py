@@ -10,7 +10,7 @@ from . import model
 
 # We do not import `.release` package since it requires extra dependencies.
 
-__version__ = version("ppktstore")
+__version__ = version("phenopacket-store-toolkit")
 
 __all__ = [
     "registry",
