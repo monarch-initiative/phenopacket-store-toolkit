@@ -5,6 +5,7 @@ import hpotk
 from phenosentry.auditor import PhenopacketAuditor, CohortAuditor
 from phenosentry.auditor.phenopacket import (
     NoUnwantedCharactersAuditor,
+    HpoTermIsDefinedAuditor,
     DeprecatedTermIdAuditor,
     PhenotypicAbnormalityAuditor,
     PresentAnnotationPropagationAuditor,
@@ -31,6 +32,7 @@ class PhenopacketStoreAuditor(Auditor[PhenopacketStore]):
         The default auditor checks that each phenopacket meets the criteria of the following auditors:
 
         * :class:`phenosentry.auditor.phenopacket.NoUnwantedCharactersAuditor`
+        * :class:`phenosentry.auditor.phenopacket.HpoTermIsDefinedAuditor`
         * :class:`phenosentry.auditor.phenopacket.DeprecatedTermIdAuditor`
         * :class:`phenosentry.auditor.phenopacket.PhenotypicAbnormalityAuditor`
         * :class:`phenosentry.auditor.phenopacket.PresentAnnotationPropagationAuditor`
@@ -47,6 +49,7 @@ class PhenopacketStoreAuditor(Auditor[PhenopacketStore]):
 
         phenopacket_auditors = [
             NoUnwantedCharactersAuditor.no_whitespace(),
+            HpoTermIsDefinedAuditor(hpo),
             DeprecatedTermIdAuditor(hpo),
             PhenotypicAbnormalityAuditor(hpo),
             PresentAnnotationPropagationAuditor(hpo),

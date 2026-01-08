@@ -4,6 +4,8 @@ import pathlib
 import os
 import sys
 
+import hpotk
+
 import ppktstore
 
 
@@ -62,6 +64,18 @@ def main(argv) -> int:
         "--notebook-dir",
         default="notebooks",
         help="path to cohorts directory",
+    )
+    parser_check.add_argument(
+        "--hpo",
+        type=pathlib.Path,
+        default=None,
+        help="path to hp.json file",
+    )
+    parser_check.add_argument(
+        "--hpo-release",
+        type=str,
+        default=None,
+        help="HPO version to use (e.g. `v2024-04-26`)",
     )
 
     # #################### ------------- `report` -------------- ####################
@@ -149,6 +163,17 @@ def main(argv) -> int:
             logger=logger,
         )
     elif args.command == "qc":
+        if args.hpo is None and args.hpo_release is None:
+            print("Either `--hpo` or `--hpo-release` must be set!")
+            return 1
+        if args.hpo is not None:
+            hpo = hpotk.load_minimal_ontology(str(args.hpo))
+        else:
+            store = hpotk.configure_ontology_store()
+            hpo = store.load_minimal_hpo(release=args.hpo_release)
+
+        logger.info(f"Using HPO version {hpo.version}")
+
         store = read_phenopacket_store(
             notebook_dir=args.notebook_dir,
             logger=logger,
@@ -157,6 +182,7 @@ def main(argv) -> int:
 
         return qc_phenopacket_store(
             store=store,
+            hpo=hpo,
             logger=logger,
         )
     elif args.command == "report":

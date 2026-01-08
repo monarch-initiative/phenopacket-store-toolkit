@@ -115,9 +115,9 @@ class CohortInfo:
     Path of the cohort relative from the enclosing source.
     """
 
-    phenopackets: typing.Collection[PhenopacketInfo]
+    phenopackets: typing.Sequence[PhenopacketInfo]
     """
-    The cohort phenopacket infos.
+    A sequence of cohort's phenopacket infos.
     """
 
     def iter_phenopackets(self) -> typing.Iterator[Phenopacket]:

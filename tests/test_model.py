@@ -31,7 +31,7 @@ class TestCohortInfo:
         cohort = cohort_info.cohort
 
         assert cohort.id == "AAGAB"
-        
+
         assert len(cohort.members) == 3
         assert list(pp.id for pp in cohort.members) == [
             "PMID_28239884_Family_1_proband",
