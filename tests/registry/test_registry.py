@@ -4,7 +4,6 @@ from ppktstore.registry import configure_phenopacket_registry
 
 
 class TestPhenopacketStoreRegistry:
-
     @pytest.mark.skip("For now, just for manual debugging")
     def test_open_phenopacket_store(
         self,

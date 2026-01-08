@@ -11,9 +11,7 @@ import zipfile
 from ppktstore.model import PhenopacketStore
 
 
-SEMVER_VERSION_PT = re.compile(
-    r"v?(?P<major>\d+)(\.(?P<minor>\d+))?(\.(?P<patch>\d+))?"
-)
+SEMVER_VERSION_PT = re.compile(r"v?(?P<major>\d+)(\.(?P<minor>\d+))?(\.(?P<patch>\d+))?")
 """
 Pattern for matching basic semantic versioning tags such as `v0.1.2`, `1.2.3`, `1`, or `1.2`.
 """
@@ -108,9 +106,7 @@ class PhenopacketStoreRegistry:
         assert isinstance(release_service, PhenopacketStoreReleaseService)
         self._release_service = release_service
 
-        assert isinstance(
-            remote_phenopacket_store_service, RemotePhenopacketStoreService
-        )
+        assert isinstance(remote_phenopacket_store_service, RemotePhenopacketStoreService)
         self._remote_ps_service = remote_phenopacket_store_service
 
     def open_phenopacket_store(
@@ -214,22 +210,14 @@ class PhenopacketStoreRegistry:
             matcher = SEMVER_VERSION_PT.match(tag)
             if matcher is not None:
                 major = matcher.group("major")
-                minor = (
-                    int(matcher.group("minor"))
-                    if matcher.group("minor") is not None
-                    else 0
-                )
-                patch = (
-                    int(matcher.group("patch"))
-                    if matcher.group("patch") is not None
-                    else 0
-                )
+                minor = int(matcher.group("minor")) if matcher.group("minor") is not None else 0
+                patch = int(matcher.group("patch")) if matcher.group("patch") is not None else 0
                 current = (major, minor, patch)
                 if latest_components is None or current > latest_components:
                     latest_components = current
                     latest_tag_idx = i
             else:
-                self._logger.warning('Skipping the release tag %s that does not match semantic versioning', tag)
+                self._logger.warning("Skipping the release tag %s that does not match semantic versioning", tag)
 
         if latest_tag_idx < 0:
             raise ValueError("Unable to retrieve the latest tag")

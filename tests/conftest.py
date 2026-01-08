@@ -1,15 +1,27 @@
 import os
-import zipfile
-
 import pytest
 
-from ppktstore.model import PhenopacketStore
+import hpotk
 
 
 @pytest.fixture(scope="session")
 def fpath_test_data() -> str:
     fpath_test_dir = os.path.join(os.getcwd(), "tests")
     return os.path.join(fpath_test_dir, "test_data")
+
+
+@pytest.fixture(scope="session")
+def fpath_hpo(
+    fpath_test_data: str,
+) -> str:
+    return os.path.join(fpath_test_data, "hp.v2024-04-26.json.gz")
+
+
+@pytest.fixture(scope="session")
+def hpo(
+    fpath_hpo: str,
+) -> hpotk.MinimalOntology:
+    return hpotk.load_minimal_ontology(fpath_hpo)
 
 
 @pytest.fixture(scope="session")
@@ -24,13 +36,3 @@ def fpath_ps_release_zip(
     fpath_test_data: str,
 ) -> str:
     return os.path.join(fpath_test_data, "test_get_store_zip0.zip")
-
-
-@pytest.fixture(scope="session")
-def phenopacket_store(
-    fpath_ps_release_zip: str,
-):
-    with zipfile.ZipFile(fpath_ps_release_zip) as zip_file:
-        yield PhenopacketStore.from_release_zip(
-            zip_file=zip_file,
-        )

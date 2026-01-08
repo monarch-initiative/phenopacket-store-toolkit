@@ -11,7 +11,6 @@ from ppktstore.release.archive import PhenopacketStoreArchiver, ArchiveFormat
 
 
 class TestPPKtStore:
-
     @pytest.fixture(scope="class")
     def phenopacket_store(
         self,
@@ -94,19 +93,16 @@ class TestPPKtStore:
                 filename=filename,
             )
 
-        assert (
-            ctx.value.args[0]
-            == f"The path must not include suffix but found {suffix} in {filename}"
-        )
+        assert ctx.value.args[0] == f"The path must not include suffix but found {suffix} in {filename}"
 
     @staticmethod
     def check_archive_spec(
         basename: str,
         filenames: typing.Iterable[str],
     ):
-        assert any(
-            file == f"{basename}/phenopacket_store.summary.tsv" for file in filenames
-        ), "The archive should include the summary TSV file"
+        assert any(file == f"{basename}/phenopacket_store.summary.tsv" for file in filenames), (
+            "The archive should include the summary TSV file"
+        )
 
         json_files = tuple(file for file in filenames if file.endswith(".json"))
         assert len(json_files) == 10, "The archive should include 10 JSON phenopackets"
@@ -118,6 +114,6 @@ class TestPPKtStore:
                 n_top_level += 1
         assert n_top_level == 1, "The archive should include only one top-level element"
 
-        assert all(
-            file.startswith(basename) for file in filenames
-        ), "All files should be located in the top-level directory"
+        assert all(file.startswith(basename) for file in filenames), (
+            "All files should be located in the top-level directory"
+        )

@@ -11,4 +11,4 @@ def relative_to(
     else:
         a_str = str(a)
         b_str = str(b)
-        return a_str.replace(b_str, '')
+        return a_str.replace(b_str, "")

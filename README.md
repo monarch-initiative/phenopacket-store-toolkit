@@ -59,11 +59,13 @@ by adding `release` profile:
 python3 -m pip install phenopacket-store-toolkit[release]
 ```
 
-Now, assuming that `notebooks` points to the notebook folder of the Phenopacket Store repository,
-we can Q/C the phenopackets by running:
+Now, we can Q/C the phenopackets in the `notebooks` directory.
+The Q/C uses HPO hierarchy, hence HPO must be provided
+either as path to a `hp.json` file via `--hpo` option
+or as a release tag via `--hpo-release`:
 
 ```shell
-python3 -m ppktstore qc --notebook-dir notebooks
+python3 -m ppktstore qc --hpo-release v2024-04-26 --notebook-dir notebooks
 ```
 
 and we can create the release archive by running:

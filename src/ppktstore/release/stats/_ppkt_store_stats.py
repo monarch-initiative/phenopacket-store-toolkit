@@ -80,13 +80,10 @@ class PPKtStoreStats:
         # stats_d["individuals per disease (n>=50)"] = len([x for x in individuals_per_disease if x >= 50])
         # stats_d["individuals per disease (n>=100)"] = len([x for x in individuals_per_disease if x >= 100])
         # Some genes are associated with multiple diseases
-        gene_by_disease_df = df[["gene", "disease_id"]].drop_duplicates()
-        gbd_counts_df = (
-            gene_by_disease_df.groupby("disease_id")
-            .count()
-            .value_counts(ascending=False)
-            .reset_index(name="count")
-        )
+        # gene_by_disease_df = df[["gene", "disease_id"]].drop_duplicates()
+        # gbd_counts_df = (
+        #     gene_by_disease_df.groupby("disease_id").count().value_counts(ascending=False).reset_index(name="count")
+        # )
         stats_d["genes associated with a single disease"] = len(
             [x for x in genes_to_disease_d.keys() if len(genes_to_disease_d[x]) == 1]
         )
@@ -134,7 +131,7 @@ class PPKtStoreStats:
         for k, v in disease_to_count_d.items():
             items.append({"disease": k, "count": v})
         return pd.DataFrame(items, index=None)
-    
+
     def get_disease_count_table(self) -> pd.DataFrame:
         """
         Returns a Pandas table with disease labels and identifiers, sorted by size of cohort.
@@ -151,12 +148,11 @@ class PPKtStoreStats:
                 disease_to_count_d[disease_term] += 1
         items = list()
         for k, v in disease_to_count_d.items():
-            items.append({"disease": k[1], "id": k[0], "cohort":k[2], "count": v})
+            items.append({"disease": k[1], "id": k[0], "cohort": k[2], "count": v})
         df = pd.DataFrame(items, index=None)
-        df_sorted = df.sort_values(by='count', ascending=False)
+        df_sorted = df.sort_values(by="count", ascending=False)
         df_sorted.reset_index(drop=True, inplace=True)
         return df_sorted
-
 
     @staticmethod
     def _get_total_and_unique_hpo_counts(
@@ -200,12 +196,8 @@ class PPKtStoreStats:
             cohort_name = cohort_info.name
             for pp_info in cohort_info.phenopackets:
                 pp = pp_info.phenopacket
-                cohort2present[cohort_name] += sum(
-                    1 for pf in pp.phenotypic_features if not pf.excluded
-                )
-                cohort2excluded[cohort_name] += sum(
-                    1 for pf in pp.phenotypic_features if pf.excluded
-                )
+                cohort2present[cohort_name] += sum(1 for pf in pp.phenotypic_features if not pf.excluded)
+                cohort2excluded[cohort_name] += sum(1 for pf in pp.phenotypic_features if pf.excluded)
                 cohort2total[cohort_name] += len(pp.phenotypic_features)
 
         c2p = list(cohort2present.values())
@@ -308,16 +300,12 @@ class PPKtStoreStats:
                                     var_list.append(e.value)
                                     stillLookingForVar = False
                             if stillLookingForVar:
-                                try:
-                                    if len(vdesc.label) > 0:
-                                        var_list.append(vdesc.label)
-                                        stillLookingForVar = False
-                                except:
-                                    pass
+                                if len(vdesc.label) > 0:
+                                    var_list.append(vdesc.label)
+                                    stillLookingForVar = False
+
                     if stillLookingForVar:
-                        print(
-                            f"[WARNING] could not find variant for phenopacket {ppkt.id}"
-                        )
+                        print(f"[WARNING] could not find variant for phenopacket {ppkt.id}")
         return var_list
 
     def get_disease_to_phenopacket_count_d(self) -> typing.Dict[str, int]:
@@ -346,9 +334,7 @@ class PPKtStoreStats:
             gene_symbol = vdesc.gene_context.symbol
             return gene_symbol
         except Exception as ee:
-            print(
-                f"Warning: Got no gene symbbol for {ppkt.id} because of {str(ee)}. Skipping"
-            )
+            print(f"Warning: Got no gene symbbol for {ppkt.id} because of {str(ee)}. Skipping")
         return None
 
     def get_gene_to_phenopacket_count_d(self) -> typing.Dict[str, int]:
@@ -367,9 +353,7 @@ class PPKtStoreStats:
         if not os.path.isfile(input_zipfile):
             raise FileNotFoundError(f"Not a file: {input_zipfile}")
         if not input_zipfile.endswith(".zip"):
-            raise ValueError(
-                f'`input_zipfile` must point to a ZIP archive with suffix .zip, but was "{input_zipfile}"'
-            )
+            raise ValueError(f'`input_zipfile` must point to a ZIP archive with suffix .zip, but was "{input_zipfile}"')
         ppkt_list = self._extract_specific_cohort_phenopackets_df(cohort_name=cohort)
         disease_id_to_label_d = dict()
         disease_counter_d = defaultdict(int)
@@ -387,9 +371,7 @@ class PPKtStoreStats:
         df.set_index("disease_id", inplace=True)
         return df
 
-    def _extract_specific_cohort_phenopackets_df(
-        self, cohort_name: str
-    ) -> typing.Sequence[Phenopacket]:
+    def _extract_specific_cohort_phenopackets_df(self, cohort_name: str) -> typing.Sequence[Phenopacket]:
         """
         Get phenopackets that belong to a specific cohort.
 
@@ -409,16 +391,12 @@ class PPKtStoreStats:
             print(f"No candidate duplicates found for {cohort}")
         return pd.DataFrame(item_list)
 
-    def show_phenopackets_with_gene(
-        self, input_zipfile, cohort, gene_symbol
-    ) -> pd.DataFrame:
+    def show_phenopackets_with_gene(self, input_zipfile, cohort, gene_symbol) -> pd.DataFrame:
         ppkt_with_gene_lst = list()
         if not os.path.isfile(input_zipfile):
             raise FileNotFoundError(f"Not a file: {input_zipfile}")
         if not input_zipfile.endswith(".zip"):
-            raise ValueError(
-                f'`input_zipfile` must point to a ZIP archive with suffix .zip, but was "{input_zipfile}"'
-            )
+            raise ValueError(f'`input_zipfile` must point to a ZIP archive with suffix .zip, but was "{input_zipfile}"')
         ppkt_list = self._extract_specific_cohort_phenopackets_df(cohort_name=cohort)
         for ppkt in ppkt_list:
             symbol = PPKtStoreStats._get_gene(ppkt=ppkt)
@@ -451,9 +429,7 @@ class PPKtStoreStats:
         cohort_list = list()
         for cohort in self._store.cohort_names():
             print(cohort)
-            ppkt_list = self._extract_specific_cohort_phenopackets_df(
-                cohort_name=cohort
-            )
+            ppkt_list = self._extract_specific_cohort_phenopackets_df(cohort_name=cohort)
             item_list = self._get_possible_duplicates_by_variant(ppkt_list=ppkt_list)
             if len(item_list) == 0:
                 continue
@@ -466,14 +442,10 @@ class PPKtStoreStats:
     def find_phenopackets_with_no_variants(self) -> pd.DataFrame:
         ppkt_with_no_var_list = list()
         for cohort in self._store.cohort_names():
-            ppkt_list = self._extract_specific_cohort_phenopackets_df(
-                cohort_name=cohort
-            )
+            ppkt_list = self._extract_specific_cohort_phenopackets_df(cohort_name=cohort)
             for ppkt in ppkt_list:
                 if len(ppkt.interpretations) == 0:
-                    ppkt_with_no_var_list.append(
-                        {"cohort": cohort, "phenopacket": ppkt.id}
-                    )
+                    ppkt_with_no_var_list.append({"cohort": cohort, "phenopacket": ppkt.id})
         if len(ppkt_with_no_var_list) == 0:
             print("All phenopackets had at least one variant")
         return pd.DataFrame(ppkt_with_no_var_list)
@@ -481,14 +453,10 @@ class PPKtStoreStats:
     def find_phenopackets_with_no_disease(self) -> pd.DataFrame:
         ppkt_with_disease_list = list()
         for cohort in self._store.cohort_names():
-            ppkt_list = self._extract_specific_cohort_phenopackets_df(
-                cohort_name=cohort
-            )
+            ppkt_list = self._extract_specific_cohort_phenopackets_df(cohort_name=cohort)
             for ppkt in ppkt_list:
                 if len(ppkt.diseases) == 0:
-                    ppkt_with_disease_list.append(
-                        {"cohort": cohort, "phenopacket": ppkt.id}
-                    )
+                    ppkt_with_disease_list.append({"cohort": cohort, "phenopacket": ppkt.id})
         if len(ppkt_with_disease_list) == 0:
             print("All phenopackets had a disease diagnosis")
         return pd.DataFrame(ppkt_with_disease_list)
