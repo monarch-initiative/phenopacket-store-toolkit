@@ -9,7 +9,7 @@ import zipfile
 from collections import defaultdict
 
 from google.protobuf.json_format import Parse
-from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket
+from phenopackets.schema.v2.phenopackets_pb2 import Phenopacket, Cohort
 
 from ._zip_util import relative_to
 
@@ -125,6 +125,21 @@ class CohortInfo:
         Get an iterator with all phenopackets belonging to the cohort.
         """
         return map(lambda pi: pi.phenopacket, self.phenopackets)
+
+    @property
+    def cohort(self) -> Cohort:
+        """
+        Create a Phenopacket Schema :class:`Cohort` from the cohort info.
+
+        The :meth:`CohortInfo.name` is used as `cohort.id`
+        and the phenopackets are added into `cohort.members`.
+
+        No cohort-level meta data is created.
+        """
+        return Cohort(
+            id=self.name,
+            members=(pi.phenopacket for pi in self.phenopackets),
+        )
 
     def export_phenopackets_to_directory(
         self,
